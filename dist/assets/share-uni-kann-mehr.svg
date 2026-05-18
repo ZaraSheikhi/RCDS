@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Uni Bremen kann mehr</title>
+  <desc id="desc">Quadratische RCDS Bremen Share-Kachel zur Gremienwahl 2026.</desc>
+  <rect width="1080" height="1080" fill="#1d4265"/>
+  <rect x="64" y="64" width="952" height="952" fill="none" stroke="#ffffff" stroke-width="10"/>
+  <rect x="64" y="64" width="952" height="116" fill="#ffffff"/>
+  <text x="104" y="139" fill="#1d4265" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="900">RCDS Bremen</text>
+  <text x="104" y="276" fill="#ffa600" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="900" letter-spacing="0">Hot Take</text>
+  <text x="104" y="420" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="112" font-weight="900">Uni Bremen</text>
+  <text x="104" y="548" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="112" font-weight="900">kann mehr.</text>
+  <rect x="104" y="628" width="180" height="14" fill="#ffa600"/>
+  <text x="104" y="730" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="47" font-weight="800">Wir studieren 2026</text>
+  <text x="104" y="790" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="47" font-weight="800">wie in 2006.</text>
+  <text x="104" y="930" fill="#e5e5e8" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="750">Programm ansehen. RCDS wählen.</text>
+</svg>

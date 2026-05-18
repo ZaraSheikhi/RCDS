@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">RCDS Bremen Gremienwahl 2026</title>
+  <desc id="desc">Open-Graph-Vorschaubild der RCDS Bremen Wahlkampfseite.</desc>
+  <rect width="1200" height="630" fill="#1d4265"/>
+  <rect x="48" y="48" width="1104" height="534" fill="none" stroke="#ffffff" stroke-width="8"/>
+  <rect x="48" y="48" width="1104" height="92" fill="#ffffff"/>
+  <text x="84" y="111" fill="#1d4265" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="900">RCDS Bremen</text>
+  <text x="84" y="244" fill="#ffa600" font-family="Inter, Arial, sans-serif" font-size="38" font-weight="900">Gremienwahl Uni Bremen 2026</text>
+  <text x="84" y="360" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="86" font-weight="900">Uni Bremen</text>
+  <text x="84" y="462" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="86" font-weight="900">kann mehr.</text>
+  <text x="84" y="540" fill="#e5e5e8" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800">Programm ansehen. RCDS wählen.</text>
+</svg>

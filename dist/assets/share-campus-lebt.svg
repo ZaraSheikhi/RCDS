@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Campus Bremen lebt</title>
+  <desc id="desc">Quadratische RCDS Bremen Share-Kachel zu Campusleben und Sicherheit.</desc>
+  <rect width="1080" height="1080" fill="#f0f0f0"/>
+  <rect x="64" y="64" width="952" height="952" fill="#ffffff" stroke="#1d4265" stroke-width="10"/>
+  <rect x="104" y="104" width="260" height="84" fill="#1d4265"/>
+  <text x="132" y="160" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="900">RCDS Bremen</text>
+  <text x="104" y="294" fill="#1d4265" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="900">Hot Take</text>
+  <text x="104" y="430" fill="#111111" font-family="Inter, Arial, sans-serif" font-size="104" font-weight="900">Der Campus</text>
+  <text x="104" y="548" fill="#111111" font-family="Inter, Arial, sans-serif" font-size="104" font-weight="900">Bremen lebt.</text>
+  <rect x="104" y="620" width="740" height="14" fill="#ffa600"/>
+  <text x="104" y="724" fill="#2d3c4b" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="800">Mehr Events.</text>
+  <text x="104" y="786" fill="#2d3c4b" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="800">Trinkwasser am Campus.</text>
+  <text x="104" y="848" fill="#2d3c4b" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="800">Sicher lernen.</text>
+  <text x="104" y="950" fill="#1d4265" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="900">Gremienwahl 08.-12. Juni 2026</text>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Verwaltung ist kein Escape Room</title>
+  <desc id="desc">Quadratische RCDS Bremen Share-Kachel zu digitaler Verwaltung.</desc>
+  <rect width="1080" height="1080" fill="#2d3c4b"/>
+  <rect x="64" y="64" width="952" height="952" fill="none" stroke="#ffa600" stroke-width="10"/>
+  <text x="104" y="148" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="38" font-weight="900">RCDS Bremen</text>
+  <text x="104" y="278" fill="#ffa600" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="900">Hot Take</text>
+  <text x="104" y="410" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="92" font-weight="900">Verwaltung</text>
+  <text x="104" y="522" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="92" font-weight="900">ist kein</text>
+  <text x="104" y="634" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="92" font-weight="900">Escape Room.</text>
+  <rect x="104" y="704" width="776" height="4" fill="#ffffff" opacity="0.55"/>
+  <text x="104" y="800" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="800">Eine App. Digitale Wahl.</text>
+  <text x="104" y="862" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="800">Transparente Beiträge.</text>
+  <text x="104" y="958" fill="#ffa600" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="900">RCDS wählen.</text>
+</svg>
