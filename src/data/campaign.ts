@@ -134,8 +134,7 @@ export const electionInfo: ElectionInfo = {
 export const programSections: ProgramSection[] = [
   {
     id: 'studium-2026',
-    hotTake: 'Uni Bremen kann mehr',
-    tagline: 'Wir studieren 2026 wie in 2006.',
+    hotTake: 'Wir studieren 2026 wie in 2006.',
     intro: [
       'Die Universität Bremen darf kein Ort des Stillstands sein. Studium muss heute mehr sein als reine Theorie: Es soll auf das Berufsleben vorbereiten, Innovation fördern und Studierenden die bestmöglichen Bedingungen zum Lernen bieten.',
       'Wir wollen eine moderne Hochschule, die Praxisnähe, Eigenverantwortung und Zukunftskompetenzen stärkt. Deshalb setzen wir uns für konkrete Verbesserungen im Studienalltag ein: von sauberen Lernräumen bis hin zu mehr Kooperationen mit Unternehmen und Start-ups.',
