@@ -1859,49 +1859,38 @@ body.reveal-ready [data-reveal].is-visible {
   }
 
   .hero-content {
-    align-self: end;
-    justify-self: start;
-    max-width: 360px;
-    padding: 42px 14px 30px;
+    padding: 64px 16px 52px;
   }
 
   .hero-content h1 {
-    font-size: clamp(2.05rem, 12vw, 2.45rem);
-    line-height: 1.04;
+    font-size: 2.65rem;
+    line-height: 1.08;
   }
 
   .hero-copy {
-    font-size: 0.92rem;
-    line-height: 1.42;
-    margin-top: 14px;
+    font-size: 1.05rem;
+    margin-top: 22px;
   }
 
   .hero-program-points {
-    gap: 6px;
-    margin-top: 14px;
+    gap: 8px;
+    margin-top: 22px;
   }
 
   .hero-program-points span {
     align-items: start;
-    font-size: 0.78rem;
-    line-height: 1.28;
-    min-height: 0;
-    padding: 7px 10px;
-  }
-
-  .hero-program-points svg {
-    height: 15px;
-    width: 15px;
+    font-size: 0.94rem;
+    line-height: 1.38;
+    padding: 10px 12px;
   }
 
   .hero-actions,
   .hero-facts {
-    margin-top: 14px;
+    margin-top: 22px;
   }
 
   .button {
-    font-size: 0.94rem;
-    min-height: 42px;
+    min-height: 48px;
     width: 100%;
   }
 
@@ -1915,12 +1904,6 @@ body.reveal-ready [data-reveal].is-visible {
   .hero-facts span,
   .source-links a {
     width: 100%;
-  }
-
-  .hero-facts span {
-    font-size: 0.84rem;
-    min-height: 34px;
-    padding: 0 10px;
   }
 
   .section-heading h2,
@@ -2104,6 +2087,59 @@ body.reveal-ready [data-reveal].is-visible {
   }
 }
 
+@media (max-width: 640px) and (hover: none) and (pointer: coarse) {
+  .hero-content {
+    align-self: end;
+    justify-self: start;
+    max-width: 360px;
+    padding: 42px 14px 30px;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(2.05rem, 12vw, 2.45rem);
+    line-height: 1.04;
+  }
+
+  .hero-copy {
+    font-size: 0.92rem;
+    line-height: 1.42;
+    margin-top: 14px;
+  }
+
+  .hero-program-points {
+    gap: 6px;
+    margin-top: 14px;
+  }
+
+  .hero-program-points span {
+    font-size: 0.78rem;
+    line-height: 1.28;
+    min-height: 0;
+    padding: 7px 10px;
+  }
+
+  .hero-program-points svg {
+    height: 15px;
+    width: 15px;
+  }
+
+  .hero-actions,
+  .hero-facts {
+    margin-top: 14px;
+  }
+
+  .button {
+    font-size: 0.94rem;
+    min-height: 42px;
+  }
+
+  .hero-facts span {
+    font-size: 0.84rem;
+    min-height: 34px;
+    padding: 0 10px;
+  }
+}
+
 @media (max-width: 380px) {
   .brand {
     gap: 8px;
@@ -2131,6 +2167,30 @@ body.reveal-ready [data-reveal].is-visible {
   }
 
   .hero-content {
+    padding: 50px 16px 42px;
+  }
+
+  .hero-content h1 {
+    font-size: 2.28rem;
+  }
+
+  .section-heading h2,
+  .section-heading h1,
+  .split-copy h2,
+  .contact-copy h1,
+  .contact-copy h2 {
+    font-size: 1.7rem;
+  }
+
+  .program-summary-card h2,
+  .election-faq h2,
+  .qr-panel h2 {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 380px) and (hover: none) and (pointer: coarse) {
+  .hero-content {
     max-width: 330px;
     padding: 38px 12px 26px;
   }
@@ -2147,20 +2207,6 @@ body.reveal-ready [data-reveal].is-visible {
   .hero-program-points span {
     font-size: 0.74rem;
     padding: 6px 9px;
-  }
-
-  .section-heading h2,
-  .section-heading h1,
-  .split-copy h2,
-  .contact-copy h1,
-  .contact-copy h2 {
-    font-size: 1.7rem;
-  }
-
-  .program-summary-card h2,
-  .election-faq h2,
-  .qr-panel h2 {
-    font-size: 1.35rem;
   }
 }
 
