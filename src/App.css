@@ -215,7 +215,7 @@
   background: var(--rcds-blue);
   color: var(--rcds-white);
   display: grid;
-  min-height: min(640px, calc(100svh - 104px));
+  min-height: calc(100svh - 104px);
   overflow: hidden;
   position: relative;
 }
@@ -230,8 +230,8 @@
   height: 100%;
   animation: hero-drift 18s ease-in-out infinite alternate;
   object-fit: cover;
-  object-position: center bottom;
-  transform: scale(1.03);
+  object-position: center 58%;
+  transform: scale(1.01);
   width: 100%;
 }
 
