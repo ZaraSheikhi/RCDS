@@ -434,7 +434,7 @@ export const leadCandidates: LeadCandidate[] = [
     text: 'Der Akademische Senat entscheidet unter anderem über Prüfungsordnungen, Studiengänge, Fachbereiche, zentrale Einrichtungen und Grundsätze der Mittelbewirtschaftung. Mattis tritt dafür an, dass diese Entscheidungen stärker aus studentischer Perspektive getroffen werden.',
   },
   {
-    role: 'Spitzenkandidatin SR',
+    role: 'Spitzenkandidat SR',
     body: 'Studierendenrat',
     name: 'Zara Sheikhi',
     text: 'Der Studierendenrat ist das höchste beschlussfassende Organ der Studierendenschaft, wählt und kontrolliert den AStA und entscheidet mit über die Verwendung der studentischen Beiträge. Zara steht für transparente Prioritäten und eine starke studentische Stimme.',

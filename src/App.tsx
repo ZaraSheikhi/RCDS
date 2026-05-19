@@ -320,13 +320,6 @@ function HomePage({ currentPage }: PageProps) {
             die Praxis, Campusleben und digitale Verwaltung endlich ernst
             nimmt.
           </p>
-          <figure className="hero-mobile-photo" aria-label="RCDS Bremen Teamfoto">
-            <img
-              src={assetHref(currentPage, campaignImages.heroTeam)}
-              alt="Team des RCDS Bremen auf dem Campus"
-              loading="eager"
-            />
-          </figure>
           <div className="hero-program-points" aria-label="Kernforderungen">
             {heroProgramPoints.map((point) => (
               <span key={point}>
