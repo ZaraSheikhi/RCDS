@@ -21,6 +21,7 @@ Die Website ist als Mehrseiten-Website aufgebaut:
 - `/wahl/`
 - `/forderungen/`
 - `/kandidierende/`
+- `/mitglied-werden/`
 - `/kontakt/`
 - `/impressum/`
 - `/datenschutz/`

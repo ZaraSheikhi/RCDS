@@ -176,6 +176,17 @@
   color: var(--rcds-white);
 }
 
+.button-outline {
+  background: transparent;
+  border-color: var(--rcds-blue);
+  color: var(--rcds-blue);
+}
+
+.button-outline:hover {
+  background: var(--rcds-blue);
+  color: var(--rcds-white);
+}
+
 .button-contact {
   background: var(--rcds-white);
   border-color: var(--rcds-blue);
@@ -203,6 +214,7 @@
 .overview-card:focus-visible,
 .program-nav-item:focus-visible,
 .program-summary-card:focus-visible,
+.button-outline:focus-visible,
 .source-links a:focus-visible,
 .text-button:focus-visible,
 .site-footer button:focus-visible,
@@ -1439,6 +1451,197 @@ body.reveal-ready [data-reveal].is-visible {
   margin: 0;
 }
 
+.section-membership {
+  background: var(--rcds-light);
+}
+
+.membership-hero-panel {
+  background: var(--rcds-white);
+  border: 1px solid var(--rcds-border);
+  border-top: 8px solid var(--rcds-accent);
+  color: var(--rcds-ink);
+  display: grid;
+  gap: 30px;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.42fr);
+  margin-top: 42px;
+  padding: 32px;
+}
+
+.membership-hero-panel h2,
+.membership-process h2,
+.membership-fields h2 {
+  color: var(--rcds-ink);
+  font-size: 2rem;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.membership-hero-panel p {
+  color: var(--rcds-muted);
+  font-size: 1.06rem;
+  line-height: 1.66;
+  margin: 18px 0 0;
+  max-width: 760px;
+}
+
+.membership-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.membership-note {
+  align-self: stretch;
+  background: var(--rcds-blue);
+  color: var(--rcds-white);
+  display: grid;
+  gap: 12px;
+  padding: 24px;
+}
+
+.membership-note svg {
+  color: var(--rcds-accent);
+}
+
+.membership-note strong {
+  font-size: 1.12rem;
+  line-height: 1.25;
+}
+
+.membership-note span {
+  color: var(--rcds-grey);
+  line-height: 1.58;
+}
+
+.membership-content-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 0.72fr) minmax(320px, 0.48fr);
+  margin-top: 42px;
+}
+
+.membership-process,
+.membership-fields {
+  color: var(--rcds-ink);
+}
+
+.membership-step-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 24px;
+}
+
+.membership-step {
+  background: var(--rcds-white);
+  border: 1px solid var(--rcds-grey);
+  border-left: 6px solid var(--rcds-blue);
+  padding: 22px;
+}
+
+.membership-step span {
+  align-items: center;
+  background: var(--rcds-accent);
+  color: var(--rcds-ink);
+  display: inline-flex;
+  font-size: 0.95rem;
+  font-weight: 950;
+  height: 38px;
+  justify-content: center;
+  width: 38px;
+}
+
+.membership-step h3 {
+  color: var(--rcds-ink);
+  font-size: 1.14rem;
+  line-height: 1.24;
+  margin: 16px 0 10px;
+}
+
+.membership-step p {
+  color: var(--rcds-muted);
+  line-height: 1.58;
+  margin: 0;
+}
+
+.membership-fields {
+  background: var(--rcds-white);
+  border: 1px solid var(--rcds-border);
+  padding: 24px;
+}
+
+.membership-field-groups {
+  display: grid;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.membership-field-groups section {
+  border-top: 1px solid var(--rcds-grey);
+  padding-top: 16px;
+}
+
+.membership-field-groups h3 {
+  color: var(--rcds-blue);
+  font-size: 0.94rem;
+  font-weight: 950;
+  letter-spacing: 0;
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+
+.membership-field-groups ul {
+  display: grid;
+  gap: 9px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.membership-field-groups li {
+  align-items: start;
+  color: var(--rcds-muted);
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 18px minmax(0, 1fr);
+  line-height: 1.42;
+}
+
+.membership-field-groups svg {
+  color: var(--rcds-blue);
+  margin-top: 2px;
+}
+
+.membership-reason-block {
+  background: var(--rcds-white);
+  border: 1px solid var(--rcds-border);
+  border-left: 10px solid var(--rcds-blue);
+  color: var(--rcds-ink);
+  margin-top: 42px;
+  padding: 32px;
+}
+
+.membership-reason-block h2 {
+  background: var(--rcds-slate);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  color: var(--rcds-white);
+  display: inline;
+  font-size: 2.15rem;
+  line-height: 1.12;
+  margin: 0;
+  padding: 4px 10px;
+}
+
+.membership-reasons-featured {
+  margin-top: 28px;
+}
+
+.membership-reasons-featured li {
+  font-size: 1.03rem;
+}
+
 .section-legal {
   background: var(--rcds-white);
 }
@@ -1759,6 +1962,10 @@ body.reveal-ready [data-reveal].is-visible {
   .lead-candidates,
   .lead-candidate-card,
   .membership-panel,
+  .membership-hero-panel,
+  .membership-step,
+  .membership-fields,
+  .membership-reason-block,
   .legal-panel,
   .privacy-layout article {
     padding: 22px;
@@ -1776,6 +1983,8 @@ body.reveal-ready [data-reveal].is-visible {
   .section-split,
   .section-contact,
   .membership-panel,
+  .membership-hero-panel,
+  .membership-content-grid,
   .compact-heading,
   .site-footer {
     grid-template-columns: 1fr;
@@ -1788,6 +1997,7 @@ body.reveal-ready [data-reveal].is-visible {
 
   .program-nav,
   .program-summary-grid,
+  .membership-step-grid,
   .share-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1937,6 +2147,9 @@ body.reveal-ready [data-reveal].is-visible {
   .election-layout,
   .election-support-grid,
   .lead-candidates,
+  .membership-hero-panel,
+  .membership-content-grid,
+  .membership-reason-block,
   .team-grid,
   .legal-grid,
   .privacy-layout {
@@ -1952,6 +2165,7 @@ body.reveal-ready [data-reveal].is-visible {
   .program-demand-grid,
   .lead-candidates-header,
   .lead-candidate-grid,
+  .membership-step-grid,
   .share-grid,
   .demand-grid,
   .overview-grid,
@@ -1986,6 +2200,10 @@ body.reveal-ready [data-reveal].is-visible {
   .lead-candidates,
   .lead-candidate-card,
   .membership-panel,
+  .membership-hero-panel,
+  .membership-step,
+  .membership-fields,
+  .membership-reason-block,
   .legal-panel,
   .privacy-layout article {
     padding: 18px;
@@ -2030,8 +2248,25 @@ body.reveal-ready [data-reveal].is-visible {
     width: 100%;
   }
 
+  .membership-reason-block {
+    border-left-width: 0;
+    border-top: 8px solid var(--rcds-blue);
+  }
+
   .membership-copy h2 {
     font-size: 1.75rem;
+  }
+
+  .membership-hero-panel h2,
+  .membership-process h2,
+  .membership-fields h2,
+  .membership-reason-block h2 {
+    font-size: 1.55rem;
+  }
+
+  .membership-hero-panel p {
+    font-size: 1rem;
+    line-height: 1.58;
   }
 
   .membership-reasons li {
@@ -2184,7 +2419,11 @@ body.reveal-ready [data-reveal].is-visible {
 
   .program-summary-card h2,
   .election-faq h2,
-  .qr-panel h2 {
+  .qr-panel h2,
+  .membership-hero-panel h2,
+  .membership-process h2,
+  .membership-fields h2,
+  .membership-reason-block h2 {
     font-size: 1.35rem;
   }
 }

@@ -8,12 +8,15 @@ import {
   FileText,
   GraduationCap,
   Landmark,
+  ListChecks,
   Mail,
   MapPin,
   Menu,
   MessageCircle,
+  Send,
   ShieldCheck,
   Sparkles,
+  UserPlus,
   Vote,
   X,
 } from 'lucide-react'
@@ -27,7 +30,10 @@ import {
   electionInfo,
   leadCandidates,
   legalInfo,
+  membershipFieldGroups,
+  membershipFormUrl,
   membershipReasons,
+  membershipSteps,
   navigation,
   programHighlights,
   programSections,
@@ -53,6 +59,7 @@ const pageKeys: PageKey[] = [
   'wahl',
   'forderungen',
   'kandidierende',
+  'mitglied-werden',
   'kontakt',
   'impressum',
   'datenschutz',
@@ -92,9 +99,9 @@ const overviewCards: Array<{
     text: 'Die Liste für die Uni Bremen 2026 mit allen neun Listenplätzen.',
   },
   {
-    page: 'kontakt',
+    page: 'mitglied-werden',
     title: 'Mitmachen',
-    text: 'Kontakt per E-Mail, Instagram oder über die offiziellen Wahlquellen.',
+    text: 'Offizieller Aufnahmeantrag, Ablauf und Gründe für eine Mitgliedschaft.',
   },
 ]
 
@@ -831,9 +838,9 @@ function ContactPage({ currentPage }: PageProps) {
           </p>
           <a
             className="button button-primary"
-            href={mailtoWithSubject('Ich möchte Mitglied beim RCDS Bremen werden')}
+            href={pageHref(currentPage, 'mitglied-werden')}
           >
-            <Mail size={20} aria-hidden="true" />
+            <UserPlus size={20} aria-hidden="true" />
             Mitglied werden
           </a>
         </div>
@@ -882,6 +889,119 @@ function ContactPage({ currentPage }: PageProps) {
           ))}
         </div>
       </section>
+    </section>
+  )
+}
+
+function MembershipPage() {
+  return (
+    <section className="section section-membership page-section">
+      <div className="section-kicker">Mitglied werden</div>
+      <div className="section-heading">
+        <h1>Mach beim RCDS Bremen mit.</h1>
+        <p>
+          Die Mitgliedschaft läuft über den offiziellen Aufnahmeantrag des
+          RCDS. Dort werden deine Angaben sicher erfasst, verifiziert und an den
+          zuständigen Verband vor Ort weitergeleitet.
+        </p>
+      </div>
+
+      <div className="membership-hero-panel" data-reveal>
+        <div>
+          <p className="program-kicker">Offizieller Antrag</p>
+          <h2>Online aufnehmen lassen, Bremen als Gruppe angeben.</h2>
+          <p>
+            Im Formular wählst du den passenden Landesverband aus und trägst
+            als gewünschte Hochschulgruppe RCDS Bremen ein. Nach der
+            E-Mail-Bestätigung kann dein Antrag vor Ort bearbeitet werden.
+          </p>
+          <div className="membership-actions">
+            <a
+              className="button button-primary"
+              href={membershipFormUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Send size={20} aria-hidden="true" />
+              Aufnahmeantrag öffnen
+            </a>
+            <a
+              className="button button-outline"
+              href={mailtoWithSubject('Frage zur RCDS-Mitgliedschaft')}
+            >
+              <Mail size={20} aria-hidden="true" />
+              Frage stellen
+            </a>
+          </div>
+        </div>
+        <aside className="membership-note" aria-label="Hinweis zum Formular">
+          <ListChecks size={30} aria-hidden="true" />
+          <strong>Was passiert mit dem Antrag?</strong>
+          <span>
+            Der Online-Aufnahmeantrag wird laut RCDS an den Verband vor Ort
+            geschickt, in dessen Hochschulort du aktiv werden möchtest.
+          </span>
+        </aside>
+      </div>
+
+      <div className="membership-content-grid">
+        <section className="membership-process" aria-labelledby="ablauf">
+          <div className="section-kicker">Ablauf</div>
+          <h2 id="ablauf">In drei Schritten zur Mitgliedschaft.</h2>
+          <div className="membership-step-grid">
+            {membershipSteps.map((step, index) => (
+              <article className="membership-step interactive-card" key={step.title} data-reveal>
+                <span>{index + 1}</span>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <aside className="membership-fields interactive-card" data-reveal>
+          <div className="section-kicker">Vorbereiten</div>
+          <h2>Diese Angaben brauchst du.</h2>
+          <div className="membership-field-groups">
+            {membershipFieldGroups.map((group) => (
+              <section key={group.title}>
+                <h3>{group.title}</h3>
+                <ul>
+                  {group.fields.map((field) => (
+                    <li key={field}>
+                      <CheckCircle2 size={18} aria-hidden="true" />
+                      <span>{field}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+        </aside>
+      </div>
+
+      <section
+        className="membership-reason-block"
+        aria-labelledby="mitgliedschaft-gruende"
+        data-reveal
+      >
+        <div className="section-kicker">Gründe</div>
+        <h2 id="mitgliedschaft-gruende">
+          Gründe, Mitglied des RCDS zu werden.
+        </h2>
+        <ul className="membership-reasons membership-reasons-featured">
+          {membershipReasons.map((reason) => (
+            <li key={reason.title}>
+              <CheckCircle2 size={20} aria-hidden="true" />
+              <span>
+                <strong>{reason.title}:</strong> {reason.text}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <WhyRcdsSection />
     </section>
   )
 }
@@ -1189,6 +1309,8 @@ function renderPage(
       return <DemandsPage />
     case 'kandidierende':
       return <CandidatesPage currentPage={currentPage} />
+    case 'mitglied-werden':
+      return <MembershipPage />
     case 'kontakt':
       return <ContactPage currentPage={currentPage} />
     case 'impressum':

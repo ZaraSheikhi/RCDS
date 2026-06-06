@@ -72,12 +72,23 @@ export type ShareAsset = {
   imagePath: string
 }
 
+export type MembershipStep = {
+  title: string
+  text: string
+}
+
+export type MembershipFieldGroup = {
+  title: string
+  fields: string[]
+}
+
 export type PageKey =
   | 'home'
   | 'wahl'
   | 'forderungen'
   | 'kandidierende'
   | 'kontakt'
+  | 'mitglied-werden'
   | 'impressum'
   | 'datenschutz'
 
@@ -105,7 +116,53 @@ export const navigation: NavigationItem[] = [
   { label: 'Wahl', page: 'wahl' },
   { label: 'Programm', page: 'forderungen' },
   { label: 'Kandidierende', page: 'kandidierende' },
+  { label: 'Mitglied werden', page: 'mitglied-werden' },
   { label: 'Kontakt', page: 'kontakt' },
+]
+
+export const membershipFormUrl = 'https://www.rcds.de/formulare/Mitgliedwerden/'
+
+export const membershipSteps: MembershipStep[] = [
+  {
+    title: 'Aufnahmeantrag ausfüllen',
+    text: 'Das offizielle Bundesformular fragt die notwendigen Kontaktdaten, den Landesverband und die gewünschte RCDS-Gruppe ab.',
+  },
+  {
+    title: 'E-Mail bestätigen',
+    text: 'Aus Sicherheitsgründen wird eine Verifikationsmail verschickt. Erst nach der Bestätigung werden die Angaben weitergegeben.',
+  },
+  {
+    title: 'Rückmeldung vor Ort',
+    text: 'Der Antrag geht an den zuständigen Verband vor Ort. Für Bremen melden wir uns anschließend direkt bei dir.',
+  },
+]
+
+export const membershipFieldGroups: MembershipFieldGroup[] = [
+  {
+    title: 'Kontaktdaten',
+    fields: [
+      'Vorname und Nachname',
+      'E-Mail-Adresse',
+      'Geburtsdatum',
+      'Adresse',
+      'Telefon optional',
+    ],
+  },
+  {
+    title: 'Zuordnung',
+    fields: [
+      'Landesverband',
+      'Gewünschte RCDS-Gruppe',
+      'Werbung durch Person optional',
+    ],
+  },
+  {
+    title: 'Datenschutz',
+    fields: [
+      'Einwilligung zur Datenverarbeitung',
+      'E-Mail-Adresse zur Verifikation',
+    ],
+  },
 ]
 
 export const electionInfo: ElectionInfo = {
@@ -478,6 +535,10 @@ export const campaignSources = [
   {
     label: 'Uni Bremen Gremienwahlen',
     href: 'https://www.uni-bremen.de/gremienwahlen',
+  },
+  {
+    label: 'RCDS Aufnahmeantrag',
+    href: membershipFormUrl,
   },
   {
     label: 'CDU Bremen RCDS',
