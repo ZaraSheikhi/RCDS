@@ -27,7 +27,8 @@ export type Candidate = {
   listPosition: number
   name: string
   studyProgram: string
-  semester: string
+  semesterSummer2026: number
+  responsibilities: string[]
   imagePath?: string
   imagePosition?: string
   imageScale?: string
@@ -72,6 +73,21 @@ export type ShareAsset = {
   imagePath: string
 }
 
+export type ContactGroup = {
+  id: string
+  label: string
+  title: string
+  description: string
+  memberNames: string[]
+}
+
+export type PressRelease = {
+  date: string
+  title: string
+  summary: string
+  href?: string
+}
+
 export type MembershipStep = {
   title: string
   text: string
@@ -87,6 +103,7 @@ export type PageKey =
   | 'wahl'
   | 'forderungen'
   | 'kandidierende'
+  | 'presse'
   | 'kontakt'
   | 'mitglied-werden'
   | 'impressum'
@@ -115,7 +132,8 @@ export type LegalInfo = {
 export const navigation: NavigationItem[] = [
   { label: 'Wahl', page: 'wahl' },
   { label: 'Programm', page: 'forderungen' },
-  { label: 'Kandidierende', page: 'kandidierende' },
+  { label: 'Ansprechpartner', page: 'kandidierende' },
+  { label: 'Presse', page: 'presse' },
   { label: 'Mitglied werden', page: 'mitglied-werden' },
   { label: 'Kontakt', page: 'kontakt' },
 ]
@@ -404,7 +422,8 @@ export const candidates: Candidate[] = [
     listPosition: 1,
     name: 'Zara Sheikhi',
     studyProgram: 'Informatik',
-    semester: '4. FS',
+    semesterSummer2026: 4,
+    responsibilities: ['Studierendenrat (SR)', 'Fachbereich 3'],
     imagePath: 'assets/candidates/zara2.webp',
     imagePosition: '50% 88%',
     imageScale: '1.12',
@@ -415,7 +434,8 @@ export const candidates: Candidate[] = [
     listPosition: 2,
     name: 'Mattis Wolf',
     studyProgram: 'Jura',
-    semester: '4. FS',
+    semesterSummer2026: 4,
+    responsibilities: ['Akademischer Senat (AS)', 'Fachbereich 6'],
     imagePath: 'assets/candidates/mattis2.webp',
     imagePosition: '50% 42%',
     placeholder: true,
@@ -424,7 +444,8 @@ export const candidates: Candidate[] = [
     listPosition: 3,
     name: 'Amira Challaoui',
     studyProgram: 'Politikwissenschaft',
-    semester: '2. FS',
+    semesterSummer2026: 2,
+    responsibilities: ['Studierendenrat (SR)', 'Fachbereich 8'],
     imagePath: 'assets/candidates/amira.webp',
     imagePosition: '58% 50%',
     placeholder: true,
@@ -433,7 +454,8 @@ export const candidates: Candidate[] = [
     listPosition: 4,
     name: 'Nils Gutmann',
     studyProgram: 'Jura',
-    semester: '2. FS',
+    semesterSummer2026: 2,
+    responsibilities: ['Fachbereich 6'],
     imagePath: 'assets/candidates/nils.webp',
     imagePosition: '50% 50%',
     placeholder: true,
@@ -443,7 +465,8 @@ export const candidates: Candidate[] = [
     name: 'Charlotte Krömker',
     studyProgram:
       'Kommunikations- und Medienwissenschaften, Politikwissenschaften',
-    semester: '6. FS',
+    semesterSummer2026: 6,
+    responsibilities: ['Fachbereich 8', 'Fachbereich 9'],
     imagePath: 'assets/candidates/charlotte.webp',
     imagePosition: '52% 50%',
     placeholder: true,
@@ -452,7 +475,8 @@ export const candidates: Candidate[] = [
     listPosition: 6,
     name: 'Lili Bürgerhoff',
     studyProgram: 'Politikwissenschaften, Soziologie',
-    semester: '3. FS',
+    semesterSummer2026: 3,
+    responsibilities: ['Fachbereich 8'],
     imagePath: 'assets/candidates/lili.webp',
     imagePosition: '52% 50%',
     placeholder: true,
@@ -461,7 +485,8 @@ export const candidates: Candidate[] = [
     listPosition: 7,
     name: 'Jakob Hornhues',
     studyProgram: 'Politikwissenschaft',
-    semester: '2. FS',
+    semesterSummer2026: 2,
+    responsibilities: ['Fachbereich 8'],
     imagePath: 'assets/candidates/jakob.webp',
     imagePosition: '50% 42%',
     placeholder: true,
@@ -470,30 +495,92 @@ export const candidates: Candidate[] = [
     listPosition: 8,
     name: 'Toni Foitl',
     studyProgram: 'Jura',
-    semester: '2. FS',
+    semesterSummer2026: 2,
+    responsibilities: ['Fachbereich 6'],
     placeholder: true,
   },
   {
     listPosition: 9,
     name: 'Lukas Aygün',
     studyProgram: 'Jura',
-    semester: '10. FS',
+    semesterSummer2026: 10,
+    responsibilities: ['Fachbereich 6'],
     placeholder: true,
   },
 ]
 
-export const leadCandidates: LeadCandidate[] = [
+export const contactGroups: ContactGroup[] = [
   {
-    role: 'Spitzenkandidat SR',
-    body: 'Studierendenrat',
-    name: 'Zara Sheikhi',
-    text: 'Der Studierendenrat ist das höchste beschlussfassende Organ der Studierendenschaft, wählt und kontrolliert den AStA und entscheidet mit über die Verwendung der studentischen Beiträge. Zara steht für transparente Prioritäten und eine starke studentische Stimme.',
+    id: 'studierendenrat',
+    label: 'SR',
+    title: 'Studierendenrat',
+    description:
+      'Ansprechpartnerinnen für studentische Selbstverwaltung, AStA-Kontrolle und die Verwendung studentischer Beiträge.',
+    memberNames: ['Zara Sheikhi', 'Amira Challaoui'],
   },
   {
-    role: 'Spitzenkandidat AS',
+    id: 'akademischer-senat',
+    label: 'AS',
+    title: 'Akademischer Senat',
+    description:
+      'Ansprechpartner für universitätsweite Entscheidungen zu Studium, Lehre und zentralen Einrichtungen.',
+    memberNames: ['Mattis Wolf'],
+  },
+  {
+    id: 'fachbereich-3',
+    label: 'FB 3',
+    title: 'Mathematik und Informatik',
+    description: 'Ansprechpartnerin für Themen aus dem Fachbereich 3.',
+    memberNames: ['Zara Sheikhi'],
+  },
+  {
+    id: 'fachbereich-6',
+    label: 'FB 6',
+    title: 'Rechtswissenschaft',
+    description: 'Ansprechpartner für Themen aus dem Fachbereich 6.',
+    memberNames: ['Mattis Wolf', 'Nils Gutmann'],
+  },
+  {
+    id: 'fachbereich-8',
+    label: 'FB 8',
+    title: 'Sozialwissenschaften',
+    description: 'Ansprechpartner für Themen aus dem Fachbereich 8.',
+    memberNames: [
+      'Amira Challaoui',
+      'Charlotte Krömker',
+      'Lili Bürgerhoff',
+      'Jakob Hornhues',
+    ],
+  },
+  {
+    id: 'fachbereich-9',
+    label: 'FB 9',
+    title: 'Kulturwissenschaften',
+    description: 'Ansprechpartnerin für Themen aus dem Fachbereich 9.',
+    memberNames: ['Charlotte Krömker'],
+  },
+]
+
+export const pressReleases: PressRelease[] = []
+
+export const leadCandidates: LeadCandidate[] = [
+  {
+    role: 'SR',
+    body: 'Studierendenrat',
+    name: 'Zara Sheikhi',
+    text: 'Zara vertritt den RCDS im Studierendenrat. Sie ist Ansprechpartnerin für die Arbeit der studentischen Selbstverwaltung, die Kontrolle des AStA und den verantwortungsvollen Umgang mit studentischen Beiträgen.',
+  },
+  {
+    role: 'SR',
+    body: 'Studierendenrat',
+    name: 'Amira Challaoui',
+    text: 'Amira vertritt den RCDS im Studierendenrat. Sie ist Ansprechpartnerin für die Arbeit der studentischen Selbstverwaltung, die Kontrolle des AStA und den verantwortungsvollen Umgang mit studentischen Beiträgen.',
+  },
+  {
+    role: 'AS',
     body: 'Akademischer Senat',
     name: 'Mattis Wolf',
-    text: 'Der Akademische Senat entscheidet unter anderem über Prüfungsordnungen, Studiengänge, Fachbereiche, zentrale Einrichtungen und Grundsätze der Mittelbewirtschaftung. Mattis tritt dafür an, dass diese Entscheidungen stärker aus studentischer Perspektive getroffen werden.',
+    text: 'Mattis ist Ansprechpartner für den Akademischen Senat und für universitätsweite Entscheidungen zu Studium, Lehre, Prüfungsordnungen und zentralen Einrichtungen.',
   },
 ]
 

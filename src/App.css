@@ -1169,6 +1169,67 @@ body.reveal-ready [data-reveal].is-visible {
   margin-top: 24px;
 }
 
+.contact-group-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 24px;
+}
+
+.contact-group-card {
+  background: var(--rcds-white);
+  border-top: 7px solid var(--rcds-accent);
+  color: var(--rcds-ink);
+  padding: 24px;
+}
+
+.contact-group-label {
+  color: var(--rcds-blue);
+  font-size: 0.8rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.contact-group-card h2 {
+  color: var(--rcds-ink);
+  font-size: 1.38rem;
+  line-height: 1.2;
+  margin: 8px 0 10px;
+}
+
+.contact-group-card > p {
+  color: var(--rcds-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.contact-group-card ul {
+  border-top: 1px solid var(--rcds-grey);
+  display: grid;
+  gap: 12px;
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 18px 0 0;
+}
+
+.contact-group-card li {
+  display: grid;
+  gap: 2px;
+}
+
+.contact-group-card li strong {
+  color: var(--rcds-blue);
+}
+
+.contact-group-card li span {
+  color: var(--rcds-muted);
+  font-size: 0.88rem;
+}
+
+.people-heading {
+  margin-top: 54px;
+}
+
 .team-card {
   align-items: start;
   background:
@@ -1301,6 +1362,17 @@ body.reveal-ready [data-reveal].is-visible {
   margin: 0;
 }
 
+.responsibility-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0 0 14px;
+}
+
+.responsibility-list .status-pill {
+  margin: 0;
+}
+
 .section-contact {
   align-items: start;
   background: var(--rcds-grey);
@@ -1321,6 +1393,93 @@ body.reveal-ready [data-reveal].is-visible {
 .contact-actions {
   display: grid;
   gap: 12px;
+}
+
+.press-layout {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.42fr);
+  margin-top: 42px;
+}
+
+.press-archive,
+.press-contact {
+  background: var(--rcds-white);
+  border: 1px solid var(--rcds-border);
+  padding: 30px;
+}
+
+.press-archive > div:first-child h2,
+.press-contact h2 {
+  color: var(--rcds-ink);
+  font-size: 2rem;
+  line-height: 1.16;
+  margin: 0;
+}
+
+.press-empty-state {
+  align-items: start;
+  background: var(--rcds-light);
+  border-left: 6px solid var(--rcds-blue);
+  display: grid;
+  gap: 9px;
+  margin-top: 24px;
+  padding: 28px;
+}
+
+.press-empty-state svg,
+.press-contact > svg {
+  color: var(--rcds-blue);
+}
+
+.press-empty-state h3 {
+  color: var(--rcds-ink);
+  margin: 4px 0 0;
+}
+
+.press-empty-state p,
+.press-contact > p {
+  color: var(--rcds-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.press-contact {
+  border-top: 8px solid var(--rcds-accent);
+  display: grid;
+  gap: 16px;
+}
+
+.press-contact .button {
+  margin-top: 8px;
+}
+
+.press-release-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.press-release-card {
+  border: 1px solid var(--rcds-grey);
+  border-left: 6px solid var(--rcds-blue);
+  padding: 22px;
+}
+
+.press-release-card time {
+  color: var(--rcds-blue);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.press-release-card h3 {
+  color: var(--rcds-ink);
+  margin: 8px 0;
+}
+
+.press-release-card p {
+  color: var(--rcds-muted);
+  line-height: 1.6;
 }
 
 .membership-panel {
@@ -1986,6 +2145,7 @@ body.reveal-ready [data-reveal].is-visible {
   .membership-hero-panel,
   .membership-content-grid,
   .compact-heading,
+  .press-layout,
   .site-footer {
     grid-template-columns: 1fr;
   }
@@ -2004,7 +2164,8 @@ body.reveal-ready [data-reveal].is-visible {
 
   .demand-grid,
   .overview-grid,
-  .team-grid {
+  .team-grid,
+  .contact-group-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -2151,6 +2312,7 @@ body.reveal-ready [data-reveal].is-visible {
   .membership-content-grid,
   .membership-reason-block,
   .team-grid,
+  .contact-group-grid,
   .legal-grid,
   .privacy-layout {
     margin-top: 28px;

@@ -13,6 +13,7 @@ import {
   MapPin,
   Menu,
   MessageCircle,
+  Newspaper,
   Send,
   ShieldCheck,
   Sparkles,
@@ -25,6 +26,7 @@ import './App.css'
 import {
   campaignSources,
   candidates,
+  contactGroups,
   contactLinks,
   electionFaqs,
   electionInfo,
@@ -37,6 +39,7 @@ import {
   navigation,
   programHighlights,
   programSections,
+  pressReleases,
   shareAssets,
 } from './data/campaign'
 import type { Candidate, ContactIcon, PageKey } from './data/campaign'
@@ -59,6 +62,7 @@ const pageKeys: PageKey[] = [
   'wahl',
   'forderungen',
   'kandidierende',
+  'presse',
   'mitglied-werden',
   'kontakt',
   'impressum',
@@ -95,8 +99,8 @@ const overviewCards: Array<{
   },
   {
     page: 'kandidierende',
-    title: 'Kandidierende',
-    text: 'Die Liste für die Uni Bremen 2026 mit allen neun Listenplätzen.',
+    title: 'Ansprechpartner',
+    text: 'Direkte Ansprechpartner für SR, AS und die vertretenen Fachbereiche.',
   },
   {
     page: 'mitglied-werden',
@@ -230,6 +234,15 @@ function getElectionCountdown() {
     label: 'Wahl beendet',
     text: 'die Gremienwahl 2026 ist abgeschlossen',
   }
+}
+
+function currentSemester(baseSemester: number, now = new Date()) {
+  const semesterIndex =
+    now.getFullYear() * 2 +
+    (now.getMonth() >= 9 ? 1 : now.getMonth() >= 3 ? 0 : -1)
+  const summer2026Index = 2026 * 2
+
+  return `${Math.max(baseSemester + semesterIndex - summer2026Index, 1)}. FS`
 }
 
 function Header({ currentPage }: PageProps) {
@@ -621,15 +634,15 @@ function LeadCandidatesBlock({ currentPage }: PageProps) {
   return (
     <section
       className="lead-candidates"
-      aria-labelledby="spitzenkandidaturen"
+      aria-labelledby="gremienvertretung"
       data-reveal
     >
       <header className="lead-candidates-header">
-        <p className="program-kicker">Spitzenkandidaturen</p>
-        <h2 id="spitzenkandidaturen">Unsere Köpfe für AS und SR.</h2>
+        <p className="program-kicker">Gremienvertretung</p>
+        <h2 id="gremienvertretung">Unsere Stimmen in AS und SR.</h2>
         <p>
-          Zwei starke Stimmen für die zentralen Entscheidungen der
-          studentischen Selbstverwaltung und der Universität.
+          Zara und Amira sind die Ansprechpartnerinnen für den
+          Studierendenrat, Mattis für den Akademischen Senat.
         </p>
       </header>
       <div className="lead-candidate-grid">
@@ -641,7 +654,7 @@ function LeadCandidatesBlock({ currentPage }: PageProps) {
           return (
             <article
               className="lead-candidate-card interactive-card"
-              key={candidate.role}
+              key={`${candidate.name}-${candidate.role}`}
               style={{ transitionDelay: `${index * 70}ms` }}
             >
               {candidateDetails?.imagePath ? (
@@ -671,7 +684,9 @@ function LeadCandidatesBlock({ currentPage }: PageProps) {
                     </div>
                     <div>
                       <dt>Fachsemester</dt>
-                      <dd>{candidateDetails.semester}</dd>
+                      <dd>
+                        {currentSemester(candidateDetails.semesterSummer2026)}
+                      </dd>
                     </div>
                   </dl>
                 ) : null}
@@ -686,22 +701,16 @@ function LeadCandidatesBlock({ currentPage }: PageProps) {
 }
 
 function CandidatesPage({ currentPage }: PageProps) {
-  const leadRolesByName = new Map(
-    leadCandidates.map((candidate) => [candidate.name, candidate.role]),
-  )
-
   return (
     <section className="section section-dark page-section">
-      <div className="section-kicker">Liste</div>
+      <div className="section-kicker">Direkter Draht</div>
       <div className="section-heading">
-        <h1>Kandidierende</h1>
+        <h1>Ansprechpartner</h1>
         <p>
-          Die Liste für die Uni Bremen 2026 ist mit Studiengängen und
-          Fachsemestern hinterlegt. Individuelle Steckbriefe können später
-          ergänzt werden.
+          Hier findest du die richtigen Personen für Fragen zum
+          Studierendenrat, zum Akademischen Senat und zu deinem Fachbereich.
         </p>
       </div>
-      <LeadCandidatesBlock currentPage={currentPage} />
       <figure className="team-photo" data-reveal>
         <img
           src={assetHref(currentPage, campaignImages.candidatesTeam)}
@@ -709,6 +718,46 @@ function CandidatesPage({ currentPage }: PageProps) {
           loading="lazy"
         />
       </figure>
+      <div className="contact-group-grid" aria-label="Ansprechpartner nach Gremium und Fachbereich">
+        {contactGroups.map((group) => (
+          <section
+            className="contact-group-card interactive-card"
+            id={group.id}
+            key={group.id}
+            data-reveal
+          >
+            <span className="contact-group-label">{group.label}</span>
+            <h2>{group.title}</h2>
+            <p>{group.description}</p>
+            <ul>
+              {group.memberNames.map((name) => {
+                const person = candidates.find((candidate) => candidate.name === name)
+
+                return (
+                  <li key={name}>
+                    <strong>{name}</strong>
+                    {person ? <span>{person.studyProgram}</span> : null}
+                  </li>
+                )
+              })}
+            </ul>
+            <a
+              className="text-link text-link-light"
+              href={mailtoWithSubject(`Anfrage zu ${group.label}`)}
+            >
+              Anfrage senden
+              <Mail size={16} aria-hidden="true" />
+            </a>
+          </section>
+        ))}
+      </div>
+      <div className="section-heading compact-heading people-heading">
+        <h2>Alle Ansprechpartner im Überblick.</h2>
+        <p>
+          Einige Personen decken mehrere Bereiche ab. Die Zuständigkeiten
+          stehen direkt beim jeweiligen Profil.
+        </p>
+      </div>
       <div className="team-grid">
         {candidates.map((candidate) => (
           <article
@@ -736,11 +785,13 @@ function CandidatesPage({ currentPage }: PageProps) {
             )}
             <div>
               <h2>{candidate.name}</h2>
-              {leadRolesByName.has(candidate.name) ? (
-                <span className="status-pill">
-                  {leadRolesByName.get(candidate.name)}
-                </span>
-              ) : null}
+              <div className="responsibility-list">
+                {candidate.responsibilities.map((responsibility) => (
+                  <span className="status-pill" key={responsibility}>
+                    {responsibility}
+                  </span>
+                ))}
+              </div>
               <dl className="candidate-meta">
                 <div>
                   <dt>Studiengang</dt>
@@ -748,7 +799,7 @@ function CandidatesPage({ currentPage }: PageProps) {
                 </div>
                 <div>
                   <dt>Fachsemester</dt>
-                  <dd>{candidate.semester}</dd>
+                  <dd>{currentSemester(candidate.semesterSummer2026)}</dd>
                 </div>
               </dl>
               {candidate.imagePath ? null : (
@@ -757,6 +808,68 @@ function CandidatesPage({ currentPage }: PageProps) {
             </div>
           </article>
         ))}
+      </div>
+    </section>
+  )
+}
+
+function PressPage() {
+  return (
+    <section className="section section-light page-section">
+      <div className="section-kicker">Presse</div>
+      <div className="section-heading">
+        <h1>Pressemeldungen</h1>
+        <p>
+          Stellungnahmen, Ankündigungen und Meldungen des RCDS Bremen an einem
+          zentralen Ort.
+        </p>
+      </div>
+      <div className="press-layout">
+        <section className="press-archive" aria-labelledby="presse-archiv" data-reveal>
+          <div>
+            <p className="program-kicker">Archiv</p>
+            <h2 id="presse-archiv">Aktuelle Meldungen</h2>
+          </div>
+          {pressReleases.length > 0 ? (
+            <div className="press-release-list">
+              {pressReleases.map((release) => (
+                <article className="press-release-card interactive-card" key={`${release.date}-${release.title}`}>
+                  <time dateTime={release.date}>{release.date}</time>
+                  <h3>{release.title}</h3>
+                  <p>{release.summary}</p>
+                  {release.href ? (
+                    <a className="text-link" href={release.href}>
+                      Meldung lesen
+                      <ExternalLink size={16} aria-hidden="true" />
+                    </a>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="press-empty-state">
+              <Newspaper size={34} aria-hidden="true" />
+              <h3>Noch keine Pressemeldungen veröffentlicht.</h3>
+              <p>Neue Meldungen erscheinen künftig an dieser Stelle.</p>
+            </div>
+          )}
+        </section>
+        <aside className="press-contact interactive-card" data-reveal>
+          <Mail size={30} aria-hidden="true" />
+          <p className="program-kicker">Pressekontakt</p>
+          <h2>Anfragen und Interviewwünsche</h2>
+          <p>
+            Für Presseanfragen, O-Töne und Hintergrundgespräche erreichst du
+            den RCDS Bremen direkt per E-Mail.
+          </p>
+          <a
+            className="button button-primary"
+            href={mailtoWithSubject('Presseanfrage an den RCDS Bremen')}
+          >
+            <Mail size={20} aria-hidden="true" />
+            Presseanfrage senden
+          </a>
+        </aside>
       </div>
     </section>
   )
@@ -1309,6 +1422,8 @@ function renderPage(
       return <DemandsPage />
     case 'kandidierende':
       return <CandidatesPage currentPage={currentPage} />
+    case 'presse':
+      return <PressPage />
     case 'mitglied-werden':
       return <MembershipPage />
     case 'kontakt':

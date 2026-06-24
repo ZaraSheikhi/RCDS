@@ -13,6 +13,7 @@ export default defineConfig({
         wahl: resolve(__dirname, 'wahl/index.html'),
         forderungen: resolve(__dirname, 'forderungen/index.html'),
         kandidierende: resolve(__dirname, 'kandidierende/index.html'),
+        presse: resolve(__dirname, 'presse/index.html'),
         mitgliedWerden: resolve(__dirname, 'mitglied-werden/index.html'),
         kontakt: resolve(__dirname, 'kontakt/index.html'),
         impressum: resolve(__dirname, 'impressum/index.html'),
