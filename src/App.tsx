@@ -877,6 +877,9 @@ function PressPage() {
 
 function ContactPage({ currentPage }: PageProps) {
   const [emailCopied, setEmailCopied] = useState(false)
+  const wishSent =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).get('gesendet') === '1'
 
   const copyEmailAddress = async () => {
     if (!navigator.clipboard) {
@@ -936,6 +939,114 @@ function ContactPage({ currentPage }: PageProps) {
           {emailCopied ? 'E-Mail kopiert' : 'E-Mail kopieren'}
         </button>
       </div>
+      <section
+        className="campus-wish-panel"
+        aria-labelledby="campus-wunsch"
+        data-reveal
+      >
+        <div className="campus-wish-copy">
+          <div className="section-kicker">Dein Campus</div>
+          <h2 id="campus-wunsch">Was soll sich an der Uni ändern?</h2>
+          <p>
+            Sag uns, was auf dem Campus fehlt, nicht funktioniert oder besser
+            werden sollte. Wir sammeln konkrete Anliegen und bringen sie in die
+            zuständigen Gremien ein.
+          </p>
+          <p className="campus-wish-note">
+            Name und E-Mail sind freiwillig. Ohne Kontaktdaten bleibt dein
+            Hinweis anonym.
+          </p>
+        </div>
+        {wishSent ? (
+          <div className="campus-wish-success" role="status">
+            <CheckCircle2 size={34} aria-hidden="true" />
+            <h3>Danke für deinen Campus-Wunsch.</h3>
+            <p>Deine Nachricht wurde direkt an den RCDS Bremen gesendet.</p>
+          </div>
+        ) : (
+        <form
+          className="campus-wish-form"
+          action={`https://formsubmit.co/${legalInfo.email}`}
+          method="POST"
+        >
+          <input
+            type="hidden"
+            name="_subject"
+            value="Neuer Campus-Wunsch über rcds-bremen.de"
+          />
+          <input type="hidden" name="_template" value="table" />
+          <input
+            type="hidden"
+            name="_next"
+            value="https://rcds-bremen.de/kontakt/?gesendet=1"
+          />
+          <input
+            className="form-honeypot"
+            type="text"
+            name="_honey"
+            tabIndex={-1}
+            autoComplete="off"
+          />
+          <label>
+            <span>Thema</span>
+            <select name="Thema" required defaultValue="">
+              <option value="" disabled>
+                Bitte auswählen
+              </option>
+              <option>Studium und Lehre</option>
+              <option>Lernräume und Bibliothek</option>
+              <option>Mensa und Verpflegung</option>
+              <option>Digitalisierung und Verwaltung</option>
+              <option>Mobilität und Erreichbarkeit</option>
+              <option>Sicherheit und Sauberkeit</option>
+              <option>Campusleben und Veranstaltungen</option>
+              <option>Sonstiges</option>
+            </select>
+          </label>
+          <label>
+            <span>Ort auf dem Campus</span>
+            <input
+              name="Ort auf dem Campus"
+              type="text"
+              placeholder="z. B. GW2, Mensa oder Domshof"
+            />
+          </label>
+          <label className="campus-wish-message">
+            <span>Dein Wunsch oder Problem</span>
+            <textarea
+              name="Wunsch oder Problem"
+              rows={6}
+              required
+              minLength={10}
+              placeholder="Beschreibe möglichst konkret, was sich ändern soll."
+            />
+          </label>
+          <label>
+            <span>Name (optional)</span>
+            <input name="Name" type="text" autoComplete="name" />
+          </label>
+          <label>
+            <span>E-Mail für Rückfragen (optional)</span>
+            <input
+              name="E-Mail für Rückfragen"
+              type="email"
+              autoComplete="email"
+            />
+          </label>
+          <label className="campus-wish-consent">
+            <input name="Datenschutz-Einwilligung" type="checkbox" required />
+            <span>
+              Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung
+              des Anliegens per E-Mail an den RCDS Bremen übermittelt werden.
+            </span>
+          </label>
+          <button className="button button-primary" type="submit">
+            <Send size={20} aria-hidden="true" />
+            Wunsch absenden
+          </button>
+        </form>
+        )}
+      </section>
       <section
         className="membership-panel interactive-card"
         aria-labelledby="mitglied-werden"
@@ -1199,7 +1310,7 @@ function PrivacyPage({ onOpenCookieSettings }: ShellProps) {
       <div className="section-heading">
         <h1>Datenschutzerklärung</h1>
         <p>
-          Stand: April 2026. Diese Hinweise beschreiben die Datenverarbeitung
+          Stand: Juni 2026. Diese Hinweise beschreiben die Datenverarbeitung
           auf dieser Wahlkampf-Website.
         </p>
       </div>
@@ -1233,15 +1344,26 @@ function PrivacyPage({ onOpenCookieSettings }: ShellProps) {
           </a>
         </article>
         <article className="interactive-card" data-reveal>
-          <h2>Kontaktaufnahme</h2>
+          <h2>Kontaktaufnahme und Campus-Wunschformular</h2>
           <p>
-            Wenn du uns per E-Mail, Telefon oder später über ein Kontaktformular
+            Wenn du uns per E-Mail, Telefon oder über das Campus-Wunschformular
             kontaktierst, verarbeiten wir deine Angaben zur Bearbeitung der
-            Anfrage und möglicher Anschlussfragen. Rechtsgrundlage ist Art. 6
-            Abs. 1 lit. b DSGVO, soweit es um vorvertragliche oder
-            mitwirkungsbezogene Kommunikation geht, sonst Art. 6 Abs. 1 lit. f
-            DSGVO.
+            Anfrage und möglicher Anschlussfragen. Das Formular wird über den
+            Dienst FormSubmit übermittelt. Dabei werden die eingegebenen Daten
+            an FormSubmit übertragen und von dort per E-Mail an uns
+            weitergeleitet. Die Übermittlung erfolgt auf Grundlage deiner
+            Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO. Name und
+            Kontaktadresse sind freiwillig.
           </p>
+          <a
+            className="text-link text-link-light"
+            href="https://formsubmit.co/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Informationen zu FormSubmit öffnen
+            <ExternalLink size={16} aria-hidden="true" />
+          </a>
         </article>
         <article className="interactive-card" data-reveal>
           <h2>Newsletter</h2>

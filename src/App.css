@@ -1395,6 +1395,139 @@ body.reveal-ready [data-reveal].is-visible {
   gap: 12px;
 }
 
+.campus-wish-panel {
+  background: var(--rcds-white);
+  border: 1px solid var(--rcds-border);
+  border-top: 8px solid var(--rcds-accent);
+  display: grid;
+  gap: 40px;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(260px, 0.72fr) minmax(360px, 1fr);
+  justify-self: center;
+  max-width: 1180px;
+  padding: 34px;
+  width: 100%;
+}
+
+.campus-wish-copy h2 {
+  color: var(--rcds-ink);
+  font-size: 2.15rem;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.campus-wish-copy > p {
+  color: var(--rcds-muted);
+  line-height: 1.65;
+  margin: 18px 0 0;
+}
+
+.campus-wish-note {
+  border-left: 5px solid var(--rcds-blue);
+  font-size: 0.92rem;
+  padding-left: 14px;
+}
+
+.campus-wish-form {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.campus-wish-form label {
+  display: grid;
+  gap: 7px;
+}
+
+.campus-wish-form label > span:first-child {
+  color: var(--rcds-slate);
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+.campus-wish-form input,
+.campus-wish-form select,
+.campus-wish-form textarea {
+  background: var(--rcds-white);
+  border: 1px solid var(--rcds-border);
+  border-radius: 0;
+  color: var(--rcds-ink);
+  min-height: 48px;
+  padding: 11px 12px;
+  width: 100%;
+}
+
+.campus-wish-form textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.campus-wish-form input:focus,
+.campus-wish-form select:focus,
+.campus-wish-form textarea:focus {
+  border-color: var(--rcds-blue);
+  outline: 3px solid rgba(255, 166, 0, 0.42);
+  outline-offset: 1px;
+}
+
+.campus-wish-message,
+.campus-wish-consent,
+.campus-wish-form .button {
+  grid-column: 1 / -1;
+}
+
+.campus-wish-consent {
+  align-items: start;
+  grid-template-columns: auto 1fr;
+}
+
+.campus-wish-consent input {
+  height: 20px;
+  min-height: 0;
+  margin: 2px 0 0;
+  width: 20px;
+}
+
+.campus-wish-consent span {
+  color: var(--rcds-muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.campus-wish-form .button {
+  justify-self: start;
+}
+
+.form-honeypot {
+  left: -10000px;
+  position: absolute;
+}
+
+.campus-wish-success {
+  align-self: center;
+  background: var(--rcds-light);
+  border-left: 7px solid var(--rcds-blue);
+  display: grid;
+  gap: 10px;
+  padding: 28px;
+}
+
+.campus-wish-success svg {
+  color: var(--rcds-blue);
+}
+
+.campus-wish-success h3 {
+  color: var(--rcds-ink);
+  font-size: 1.35rem;
+  margin: 0;
+}
+
+.campus-wish-success p {
+  color: var(--rcds-muted);
+  margin: 0;
+}
+
 .press-layout {
   display: grid;
   gap: 24px;
@@ -2120,6 +2253,7 @@ body.reveal-ready [data-reveal].is-visible {
   .qr-panel,
   .lead-candidates,
   .lead-candidate-card,
+  .campus-wish-panel,
   .membership-panel,
   .membership-hero-panel,
   .membership-step,
@@ -2141,6 +2275,7 @@ body.reveal-ready [data-reveal].is-visible {
   .lead-candidates,
   .section-split,
   .section-contact,
+  .campus-wish-panel,
   .membership-panel,
   .membership-hero-panel,
   .membership-content-grid,
@@ -2337,6 +2472,15 @@ body.reveal-ready [data-reveal].is-visible {
 
   .program-section-header {
     grid-template-columns: 1fr;
+  }
+
+  .campus-wish-form {
+    grid-template-columns: 1fr;
+  }
+
+  .campus-wish-form label,
+  .campus-wish-form .button {
+    grid-column: 1;
   }
 
   .program-section {
