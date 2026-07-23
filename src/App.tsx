@@ -641,7 +641,7 @@ function LeadCandidatesBlock({ currentPage }: PageProps) {
         <p className="program-kicker">Gremienvertretung</p>
         <h2 id="gremienvertretung">Unsere Stimmen in AS und SR.</h2>
         <p>
-          Zara und Amira sind die Ansprechpartnerinnen für den
+          Zara und Amira sind die Ansprechpersonen für den
           Studierendenrat, Mattis für den Akademischen Senat.
         </p>
       </header>

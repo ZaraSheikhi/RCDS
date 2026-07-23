@@ -515,7 +515,7 @@ export const contactGroups: ContactGroup[] = [
     label: 'SR',
     title: 'Studierendenrat',
     description:
-      'Ansprechpartnerinnen für studentische Selbstverwaltung, AStA-Kontrolle und die Verwendung studentischer Beiträge.',
+      'Ansprechpersonen für studentische Selbstverwaltung, AStA-Kontrolle und die Verwendung studentischer Beiträge.',
     memberNames: ['Zara Sheikhi', 'Amira Challaoui'],
   },
   {
@@ -530,7 +530,7 @@ export const contactGroups: ContactGroup[] = [
     id: 'fachbereich-3',
     label: 'FB 3',
     title: 'Mathematik und Informatik',
-    description: 'Ansprechpartnerin für Themen aus dem Fachbereich 3.',
+    description: 'Ansprechpartner für Themen aus dem Fachbereich 3.',
     memberNames: ['Zara Sheikhi'],
   },
   {
@@ -568,7 +568,7 @@ export const leadCandidates: LeadCandidate[] = [
     role: 'SR',
     body: 'Studierendenrat',
     name: 'Zara Sheikhi',
-    text: 'Zara vertritt den RCDS im Studierendenrat. Sie ist Ansprechpartnerin für die Arbeit der studentischen Selbstverwaltung, die Kontrolle des AStA und den verantwortungsvollen Umgang mit studentischen Beiträgen.',
+    text: 'Zara vertritt den RCDS im Studierendenrat. Er ist Ansprechpartner für die Arbeit der studentischen Selbstverwaltung, die Kontrolle des AStA und den verantwortungsvollen Umgang mit studentischen Beiträgen.',
   },
   {
     role: 'SR',
