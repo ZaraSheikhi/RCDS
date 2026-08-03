@@ -2922,6 +2922,9 @@ body.reveal-ready [data-reveal].is-visible {
     display: grid;
     gap: 0;
     left: 0;
+    max-height: calc(100dvh - 76px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 12px 18px 18px;
     position: absolute;
     right: 0;
@@ -2929,7 +2932,9 @@ body.reveal-ready [data-reveal].is-visible {
   }
 
   .site-header.menu-open .nav-links a {
+    align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    display: flex;
     min-height: 50px;
     padding: 12px 0;
   }
@@ -3045,11 +3050,17 @@ body.reveal-ready [data-reveal].is-visible {
   .site-header {
     gap: 8px;
     min-height: 66px;
-    padding: 8px 12px;
+    padding: 8px max(12px, env(safe-area-inset-right)) 8px
+      max(12px, env(safe-area-inset-left));
+  }
+
+  .site-header.menu-open .nav-links {
+    max-height: calc(100dvh - 66px);
+    padding-bottom: max(18px, env(safe-area-inset-bottom));
   }
 
   .mobile-menu-button {
-    min-height: 40px;
+    min-height: 44px;
     padding: 0 10px;
   }
 
@@ -3064,6 +3075,7 @@ body.reveal-ready [data-reveal].is-visible {
   }
 
   .header-cta {
+    min-height: 44px;
     min-width: 48px;
     padding: 0 12px;
   }
@@ -3157,7 +3169,14 @@ body.reveal-ready [data-reveal].is-visible {
   }
 
   .section {
-    padding: 48px 16px;
+    padding: 48px max(16px, env(safe-area-inset-right)) 48px
+      max(16px, env(safe-area-inset-left));
+  }
+
+  .section-kicker,
+  .eyebrow {
+    font-size: 0.76rem;
+    margin-bottom: 14px;
   }
 
   .section-work {
@@ -3227,6 +3246,10 @@ body.reveal-ready [data-reveal].is-visible {
   }
 
   .institution-nav a {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    min-height: 48px;
     text-align: center;
   }
 
@@ -3282,7 +3305,8 @@ body.reveal-ready [data-reveal].is-visible {
   .share-grid,
   .demand-grid,
   .overview-grid,
-  .team-grid {
+  .team-grid,
+  .contact-group-grid {
     grid-template-columns: 1fr;
   }
 
@@ -3302,6 +3326,15 @@ body.reveal-ready [data-reveal].is-visible {
   .program-section {
     padding-top: 24px;
     scroll-margin-top: 84px;
+  }
+
+  .program-sections {
+    gap: 44px;
+  }
+
+  .program-section-icon {
+    height: 50px;
+    width: 50px;
   }
 
   .program-section h2 {
@@ -3356,6 +3389,16 @@ body.reveal-ready [data-reveal].is-visible {
     padding: 14px;
   }
 
+  .text-link,
+  .text-button,
+  .press-detail-back,
+  .press-release-actions a,
+  .press-attachment-list a {
+    align-items: center;
+    display: inline-flex;
+    min-height: 44px;
+  }
+
   .election-details div {
     padding: 18px;
   }
@@ -3397,6 +3440,52 @@ body.reveal-ready [data-reveal].is-visible {
     padding: 12px;
   }
 
+  .campus-wish-panel {
+    gap: 28px;
+  }
+
+  .campus-wish-form {
+    gap: 16px;
+  }
+
+  .campus-wish-form input,
+  .campus-wish-form select {
+    min-height: 48px;
+  }
+
+  .campus-wish-form textarea {
+    min-height: 150px;
+  }
+
+  .press-archive,
+  .press-contact {
+    padding: 20px;
+  }
+
+  .press-release-card {
+    padding: 18px;
+  }
+
+  .press-release-card h3 {
+    font-size: 1.3rem;
+    line-height: 1.22;
+  }
+
+  .team-card.has-photo > div {
+    padding: 0 18px 18px;
+  }
+
+  .site-footer {
+    padding: 34px max(16px, env(safe-area-inset-right))
+      max(34px, env(safe-area-inset-bottom))
+      max(16px, env(safe-area-inset-left));
+  }
+
+  .site-footer button,
+  .source-links a {
+    min-height: 44px;
+  }
+
   .share-card div {
     padding: 16px;
   }
@@ -3419,7 +3508,9 @@ body.reveal-ready [data-reveal].is-visible {
     left: 0;
     max-height: 78svh;
     overflow: auto;
-    padding: 14px;
+    padding: 14px max(14px, env(safe-area-inset-right))
+      max(14px, env(safe-area-inset-bottom))
+      max(14px, env(safe-area-inset-left));
     right: 0;
   }
 
@@ -3548,6 +3639,16 @@ body.reveal-ready [data-reveal].is-visible {
   .membership-reason-block h2 {
     font-size: 1.35rem;
   }
+
+  .cookie-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .cookie-actions .button,
+  .cookie-actions .button:first-child {
+    grid-column: 1;
+    width: 100%;
+  }
 }
 
 @media (max-width: 380px) and (hover: none) and (pointer: coarse) {
@@ -3589,12 +3690,13 @@ body.reveal-ready [data-reveal].is-visible {
 
   .press-detail-header {
     gap: 17px;
-    padding: 28px 22px;
+    padding: 26px 18px;
   }
 
   .press-detail-header h1 {
-    font-size: clamp(2.05rem, 11vw, 3rem);
-    line-height: 1.02;
+    font-size: clamp(1.9rem, 10vw, 2.55rem);
+    line-height: 1.04;
+    overflow-wrap: anywhere;
   }
 
   .press-detail-actions {
@@ -3606,7 +3708,7 @@ body.reveal-ready [data-reveal].is-visible {
   }
 
   .press-article-body {
-    padding: 28px 22px;
+    padding: 26px 18px;
   }
 
   .press-article-body > p {
@@ -3615,12 +3717,26 @@ body.reveal-ready [data-reveal].is-visible {
   }
 
   .press-article-body blockquote {
-    margin: 28px -4px;
-    padding: 22px;
+    margin: 26px 0;
+    padding: 20px;
   }
 
   .press-detail-aside {
     grid-template-columns: 1fr;
+  }
+
+  .press-detail-aside-card {
+    padding: 20px;
+  }
+}
+
+@media (hover: none) {
+  .interactive-card:hover,
+  .button:hover,
+  .header-cta:hover,
+  .overview-card:hover {
+    box-shadow: none;
+    transform: none;
   }
 }
 

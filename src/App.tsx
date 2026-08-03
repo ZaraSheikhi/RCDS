@@ -818,9 +818,8 @@ function CandidatesPage({ currentPage }: PageProps) {
             className="institution-section"
             id={institution.id}
             key={institution.id}
-            data-reveal
           >
-            <header className="institution-header">
+            <header className="institution-header" data-reveal>
               <span>{institution.label}</span>
               <div>
                 <h2>{institution.title}</h2>
