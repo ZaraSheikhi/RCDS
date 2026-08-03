@@ -14,6 +14,10 @@ export default defineConfig({
         forderungen: resolve(__dirname, 'forderungen/index.html'),
         kandidierende: resolve(__dirname, 'kandidierende/index.html'),
         presse: resolve(__dirname, 'presse/index.html'),
+        pressemitteilungBsu: resolve(
+          __dirname,
+          'presse/internationale-studierende/index.html',
+        ),
         mitgliedWerden: resolve(__dirname, 'mitglied-werden/index.html'),
         kontakt: resolve(__dirname, 'kontakt/index.html'),
         impressum: resolve(__dirname, 'impressum/index.html'),

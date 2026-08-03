@@ -1,6 +1,7 @@
-# RCDS Bremen Wahlkampf-Website
+# RCDS Bremen Website
 
-React/Vite-Mehrseiten-Website fuer den RCDS Bremen zur Gremienwahl 2026 an der Universitaet Bremen.
+React/Vite-Mehrseiten-Website fuer den RCDS Bremen mit aktuellen Projekten,
+Terminen, Ansprechpartnern, Positionen und Wahlarchiv.
 
 ## Entwicklung
 
@@ -11,7 +12,8 @@ npm run dev
 
 ## Inhalte bearbeiten
 
-Kampagnendaten, Quellen, Kontaktlinks, Forderungen und Kandidierenden-Platzhalter liegen in `src/data/campaign.ts`.
+Projekte, Termine, Pressemeldungen, Wahlergebnisse, Quellen, Kontaktlinks,
+Positionen und Ansprechpartner liegen in `src/data/campaign.ts`.
 
 ## Seiten
 
@@ -22,6 +24,7 @@ Die Website ist als Mehrseiten-Website aufgebaut:
 - `/forderungen/`
 - `/kandidierende/`
 - `/presse/`
+- `/presse/internationale-studierende/`
 - `/mitglied-werden/`
 - `/kontakt/`
 - `/impressum/`

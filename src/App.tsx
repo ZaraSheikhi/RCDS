@@ -1,5 +1,6 @@
 import { type CSSProperties, useEffect, useState } from 'react'
 import {
+  ArrowLeft,
   CalendarDays,
   Check,
   CheckCircle2,
@@ -10,7 +11,6 @@ import {
   Landmark,
   ListChecks,
   Mail,
-  MapPin,
   Menu,
   MessageCircle,
   Newspaper,
@@ -28,8 +28,9 @@ import {
   candidates,
   contactGroups,
   contactLinks,
-  electionFaqs,
+  currentProjects,
   electionInfo,
+  electionResults,
   leadCandidates,
   legalInfo,
   membershipFieldGroups,
@@ -40,7 +41,7 @@ import {
   programHighlights,
   programSections,
   pressReleases,
-  shareAssets,
+  upcomingEvents,
 } from './data/campaign'
 import type { Candidate, ContactIcon, PageKey } from './data/campaign'
 
@@ -63,23 +64,36 @@ const pageKeys: PageKey[] = [
   'forderungen',
   'kandidierende',
   'presse',
+  'pressemitteilung-bsu',
   'mitglied-werden',
   'kontakt',
   'impressum',
   'datenschutz',
 ]
 
-const campaignImages = {
+const pagePaths: Record<PageKey, string> = {
+  home: '',
+  wahl: 'wahl',
+  forderungen: 'forderungen',
+  kandidierende: 'kandidierende',
+  presse: 'presse',
+  'pressemitteilung-bsu': 'presse/internationale-studierende',
+  'mitglied-werden': 'mitglied-werden',
+  kontakt: 'kontakt',
+  impressum: 'impressum',
+  datenschutz: 'datenschutz',
+}
+
+const siteImages = {
   brandLogo: 'assets/rcds-bremen-logo-white.png',
   heroTeam: 'assets/rcds-team-campus.webp',
   candidatesTeam: 'assets/rcds-team-domshof.webp',
-  electionQr: 'assets/rcds-wahl-qr.svg',
 }
 
 const heroProgramPoints = [
-  'Moderne Bibliotheken, mehr Lernplätze und digitale Sitzplatzanzeige',
-  'Campusleben, Trinkwasser und Sicherheit ernst nehmen',
-  'Eine App statt Website- und Plastikkartenchaos',
+  'Zwei Sitze im Studierendenrat für die Amtszeit 2026/27',
+  'Zara Sheikhi und Amira Challaoui vertreten den RCDS',
+  'Campus-Anliegen aufnehmen und in die Gremien bringen',
 ]
 
 const overviewCards: Array<{
@@ -89,18 +103,18 @@ const overviewCards: Array<{
 }> = [
   {
     page: 'wahl',
-    title: 'Wahlinfo',
-    text: `${electionInfo.dateRange}, Universität Bremen`,
+    title: 'Wahlarchiv',
+    text: 'Offizielle Ergebnisse der SR- und Gremienwahlen 2026.',
   },
   {
     page: 'forderungen',
-    title: 'Programm',
-    text: 'Das RCDS-Programm mit vier Hot Takes und konkreten Forderungen.',
+    title: 'Positionen',
+    text: 'Unser Programm bleibt die Grundlage für die politische Arbeit.',
   },
   {
     page: 'kandidierende',
     title: 'Ansprechpartner',
-    text: 'Direkte Ansprechpartner für SR, AS und die vertretenen Fachbereiche.',
+    text: 'Getrennte Teams für Universität Bremen und Hochschule Bremen.',
   },
   {
     page: 'mitglied-werden',
@@ -108,6 +122,29 @@ const overviewCards: Array<{
     text: 'Offizieller Aufnahmeantrag, Ablauf und Gründe für eine Mitgliedschaft.',
   },
 ]
+
+const institutionSections = [
+  {
+    id: 'universitaet-bremen' as const,
+    label: 'Uni Bremen',
+    title: 'Universität Bremen',
+    description:
+      'Ansprechpartner für Studierendenrat, Akademischen Senat und die vertretenen Fachbereiche der Universität Bremen.',
+  },
+  {
+    id: 'hochschule-bremen' as const,
+    label: 'HS Bremen',
+    title: 'Hochschule Bremen',
+    description:
+      'Das Team und die Zuständigkeiten an der Hochschule Bremen werden ergänzt, sobald die Personen feststehen.',
+  },
+]
+
+const candidatesByName = new Map(
+  candidates.map((candidate) => [candidate.name, candidate]),
+)
+
+const latestPressRelease = pressReleases[0]
 
 type CookieConsent = {
   necessary: true
@@ -134,9 +171,6 @@ type ShellProps = PageProps & {
 }
 
 const consentStorageKey = 'rcds-cookie-consent'
-const electionStart = new Date('2026-06-08T00:00:00+02:00')
-const electionEnd = new Date('2026-06-12T23:59:59+02:00')
-
 function isPageKey(value: string | undefined): value is PageKey {
   return pageKeys.includes(value as PageKey)
 }
@@ -152,15 +186,27 @@ function getCurrentPage(): PageKey {
 }
 
 function pageHref(currentPage: PageKey, targetPage: PageKey) {
-  if (currentPage === 'home') {
-    return targetPage === 'home' ? './' : `${targetPage}/`
-  }
+  const rootHref =
+    currentPage === 'home'
+      ? './'
+      : currentPage === 'pressemitteilung-bsu'
+        ? '../../'
+        : '../'
 
-  return targetPage === 'home' ? '../' : `../${targetPage}/`
+  return targetPage === 'home'
+    ? rootHref
+    : `${rootHref}${pagePaths[targetPage]}/`
 }
 
 function assetHref(currentPage: PageKey, path: string) {
-  return currentPage === 'home' ? path : `../${path}`
+  const rootHref =
+    currentPage === 'home'
+      ? './'
+      : currentPage === 'pressemitteilung-bsu'
+        ? '../../'
+        : '../'
+
+  return `${rootHref}${path}`
 }
 
 function candidateImageStyle(
@@ -209,33 +255,6 @@ function readStoredCookieConsent(): CookieConsent | null {
   return parseCookieConsent(window.localStorage.getItem(consentStorageKey))
 }
 
-function getElectionCountdown() {
-  const now = new Date()
-
-  if (now < electionStart) {
-    const days = Math.ceil(
-      (electionStart.getTime() - now.getTime()) / 86_400_000,
-    )
-
-    return {
-      label: `Noch ${days} ${days === 1 ? 'Tag' : 'Tage'}`,
-      text: 'bis zum Start der Gremienwahl',
-    }
-  }
-
-  if (now <= electionEnd) {
-    return {
-      label: 'Jetzt wählen',
-      text: 'die Gremienwahl läuft aktuell',
-    }
-  }
-
-  return {
-    label: 'Wahl beendet',
-    text: 'die Gremienwahl 2026 ist abgeschlossen',
-  }
-}
-
 function currentSemester(baseSemester: number, now = new Date()) {
   const semesterIndex =
     now.getFullYear() * 2 +
@@ -243,6 +262,14 @@ function currentSemester(baseSemester: number, now = new Date()) {
   const summer2026Index = 2026 * 2
 
   return `${Math.max(baseSemester + semesterIndex - summer2026Index, 1)}. FS`
+}
+
+function candidateInitials(name: string) {
+  return name
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
 }
 
 function Header({ currentPage }: PageProps) {
@@ -274,11 +301,11 @@ function Header({ currentPage }: PageProps) {
         aria-label="RCDS Bremen Start"
       >
         <span className="brand-mark" aria-hidden="true">
-          <img src={assetHref(currentPage, campaignImages.brandLogo)} alt="" />
+          <img src={assetHref(currentPage, siteImages.brandLogo)} alt="" />
         </span>
         <span>
           <strong>RCDS Bremen</strong>
-          <small>Uni Bremen 2026</small>
+          <small>Hochschulpolitik</small>
         </span>
       </a>
       <button
@@ -312,9 +339,9 @@ function Header({ currentPage }: PageProps) {
           </a>
         ))}
       </nav>
-      <a className="header-cta" href={pageHref(currentPage, 'wahl')}>
-        <Vote size={18} aria-hidden="true" />
-        RCDS wählen
+      <a className="header-cta" href={pageHref(currentPage, 'kontakt')}>
+        <Send size={18} aria-hidden="true" />
+        Anliegen melden
       </a>
     </header>
   )
@@ -326,21 +353,21 @@ function HomePage({ currentPage }: PageProps) {
       <section className="hero-section">
         <div className="hero-media" aria-hidden="true">
           <img
-            src={assetHref(currentPage, campaignImages.heroTeam)}
+            src={assetHref(currentPage, siteImages.heroTeam)}
             alt=""
             loading="eager"
           />
         </div>
         <div className="hero-overlay" />
         <div className="hero-content">
-          <p className="eyebrow">Hot Take zur Gremienwahl 2026</p>
-          <h1>Uni Bremen kann mehr.</h1>
+          <p className="eyebrow">Nach der Wahl 2026</p>
+          <h1>Danke für euer Vertrauen.</h1>
           <p className="hero-copy">
-            Wir studieren 2026 wie in 2006. Der RCDS steht für eine Uni,
-            die Praxis, Campusleben und digitale Verwaltung endlich ernst
-            nimmt.
+            Mit zwei Sitzen im Studierendenrat beginnt für uns die Arbeit.
+            Wir bleiben ansprechbar, bringen eure Anliegen in die Gremien und
+            machen unsere nächsten Schritte hier sichtbar.
           </p>
-          <div className="hero-program-points" aria-label="Kernforderungen">
+          <div className="hero-program-points" aria-label="Ergebnis und Auftrag">
             {heroProgramPoints.map((point) => (
               <span key={point}>
                 <CheckCircle2 size={18} aria-hidden="true" />
@@ -351,36 +378,103 @@ function HomePage({ currentPage }: PageProps) {
           <div className="hero-actions" aria-label="Wichtige Aktionen">
             <a
               className="button button-primary"
-              href={pageHref(currentPage, 'forderungen')}
+              href={pageHref(currentPage, 'kontakt')}
             >
-              <FileText size={20} aria-hidden="true" />
-              Programm ansehen
+              <Send size={20} aria-hidden="true" />
+              Campus-Anliegen melden
             </a>
-            <a className="button button-secondary" href={pageHref(currentPage, 'wahl')}>
+            <a
+              className="button button-secondary"
+              href={pageHref(currentPage, 'wahl')}
+            >
               <Vote size={20} aria-hidden="true" />
-              RCDS wählen
+              Wahlergebnis 2026
             </a>
           </div>
-          <div className="hero-facts" aria-label="Wahldaten">
+          <div className="hero-facts" aria-label="Wahlergebnis">
             <span>
-              <CalendarDays size={18} aria-hidden="true" />
-              {electionInfo.dateRange}
+              <Vote size={18} aria-hidden="true" />
+              93 Stimmen · 2 Sitze
             </span>
             <span>
-              <MapPin size={18} aria-hidden="true" />
-              Universität Bremen
+              <CalendarDays size={18} aria-hidden="true" />
+              Amtszeit 2026/27
             </span>
           </div>
         </div>
       </section>
 
+      <section className="section section-work" id="projekte" data-reveal>
+        <div className="work-column">
+          <div className="section-kicker">Aktuelle Projekte</div>
+          <div className="work-list">
+            {currentProjects.map((project) => (
+              <article className="work-item" key={project.title} data-reveal>
+                <span>{project.status}</span>
+                <div>
+                  <h2>{project.title}</h2>
+                  <p>{project.text}</p>
+                  {project.page ? (
+                    <a
+                      className="text-link"
+                      href={pageHref(currentPage, project.page)}
+                    >
+                      Mehr erfahren
+                      <ExternalLink size={16} aria-hidden="true" />
+                    </a>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+        <aside className="events-panel" aria-labelledby="naechste-termine">
+          <CalendarDays size={30} aria-hidden="true" />
+          <p className="program-kicker">Kalender</p>
+          <h2 id="naechste-termine">Nächste Termine</h2>
+          {upcomingEvents.length > 0 ? (
+            <div className="event-list">
+              {upcomingEvents.map((event) => (
+                <article key={`${event.date}-${event.title}`}>
+                  <time dateTime={event.date}>{event.date}</time>
+                  <h3>{event.title}</h3>
+                  <p>{event.details}</p>
+                  {event.href ? (
+                    <a className="text-link" href={event.href}>
+                      Termin öffnen
+                      <ExternalLink size={16} aria-hidden="true" />
+                    </a>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="events-empty">
+              <p>
+                Der nächste öffentliche Termin wird hier veröffentlicht,
+                sobald er feststeht.
+              </p>
+              <a
+                className="text-link"
+                href="https://www.instagram.com/rcds.bremen/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Auf Instagram folgen
+                <ExternalLink size={16} aria-hidden="true" />
+              </a>
+            </div>
+          )}
+        </aside>
+      </section>
+
       <section className="section section-light" data-reveal>
-        <div className="section-kicker">Start</div>
+        <div className="section-kicker">Direkt erreichbar</div>
         <div className="section-heading">
-          <h2>Alles zur Gremienwahl auf eigenen Seiten.</h2>
+          <h2>Ergebnisse, Positionen und Ansprechpartner.</h2>
           <p>
-            Wahltermin, Programm, Kandidierende und Kontakt sind getrennt
-            aufgebaut, damit jede Information direkt erreichbar bleibt.
+            Die Wahl ist abgeschlossen. Das Programm bleibt unser Auftrag und
+            die richtigen Kontaktpersonen sind weiterhin direkt erreichbar.
           </p>
         </div>
         <div className="overview-grid">
@@ -398,113 +492,111 @@ function HomePage({ currentPage }: PageProps) {
         </div>
       </section>
 
+      <section className="section home-press-preview" data-reveal>
+        <div>
+          <div className="section-kicker">Aktuelles</div>
+          <h2>
+            {latestPressRelease
+              ? 'Neue Pressemitteilung.'
+              : 'Pressemeldungen und Stellungnahmen.'}
+          </h2>
+          <p>
+            {latestPressRelease
+              ? `${latestPressRelease.dateLabel}: ${latestPressRelease.title}`
+              : 'Neue Meldungen erscheinen künftig gesammelt im Pressebereich.'}
+          </p>
+        </div>
+        <a className="button button-outline" href={pageHref(currentPage, 'presse')}>
+          <Newspaper size={20} aria-hidden="true" />
+          Zum Pressebereich
+        </a>
+      </section>
+
       <WhyRcdsSection />
     </>
   )
 }
 
 function ElectionPage({ currentPage }: PageProps) {
-  const electionCountdown = getElectionCountdown()
-
   return (
     <section className="section section-blue page-section">
-      <div className="section-kicker">Wahlinfo</div>
+      <div className="section-kicker">Wahlarchiv</div>
       <div className="section-heading">
         <h1>{electionInfo.title}</h1>
         <p>{electionInfo.summary}</p>
       </div>
-      <div className="election-layout">
-        <article className="election-panel interactive-card" data-reveal>
-          <span className="panel-icon">
-            <Vote size={28} aria-hidden="true" />
-          </span>
-          <h2>Deine Stimme zählt</h2>
-          <p>
-            {electionInfo.electionNote}
-          </p>
-          <div className="text-link-group">
-            <a
-              className="text-link"
-              href={electionInfo.sourceUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              AS/FBR-Wahlseite öffnen
-              <ExternalLink size={16} aria-hidden="true" />
-            </a>
-            <a
-              className="text-link"
-              href={electionInfo.studentCouncilSourceUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              SR-Wahlseite öffnen
-              <ExternalLink size={16} aria-hidden="true" />
-            </a>
-          </div>
-        </article>
-        <div className="election-details" aria-label="Details zur Wahl">
-          <div className="countdown-panel" data-reveal>
-            <strong>{electionCountdown.label}</strong>
-            <span>{electionCountdown.text}</span>
-          </div>
-          <div data-reveal>
-            <strong>Zeitraum</strong>
-            <span>{electionInfo.dateRange}</span>
-          </div>
-          <div data-reveal>
-            <strong>Gremien</strong>
-            <span>{electionInfo.bodies.join(', ')}</span>
-          </div>
-          <div data-reveal>
-            <strong>Wahlausweis</strong>
-            <span>{electionInfo.votingNote}</span>
-          </div>
-          <div data-reveal>
-            <strong>Wahllokale</strong>
-            <span>{electionInfo.pollingPlaces.join(', ')}</span>
-          </div>
-        </div>
-      </div>
-      <LeadCandidatesBlock currentPage={currentPage} />
-      <div className="election-support-grid">
-        <section className="election-faq" aria-labelledby="wahl-faq" data-reveal>
-          <div className="section-kicker">FAQ</div>
-          <h2 id="wahl-faq">Kurz geklärt</h2>
-          <div className="faq-list">
-            {electionFaqs.map((item) => (
-              <article key={item.question}>
-                <h3>{item.question}</h3>
-                <p>{item.answer}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-        <aside className="qr-panel interactive-card" data-reveal>
-          <img
-            src={assetHref(currentPage, campaignImages.electionQr)}
-            alt="QR-Code zur offiziellen Wahlseite der Universität Bremen"
-            loading="lazy"
-          />
+
+      <nav className="election-year-nav" aria-label="Wahljahre">
+        <a href="#wahl-2026" aria-current="page">2026</a>
+      </nav>
+
+      <section className="election-year" id="wahl-2026" aria-labelledby="wahljahr-2026">
+        <header className="election-year-header" data-reveal>
           <div>
-            <p className="program-kicker">QR-Code</p>
-            <h2>Direkt zur Wahlseite</h2>
-            <p>
-              Für Flyer, Plakate und schnelle Weiterleitung zur offiziellen
-              Wahlseite der Universität Bremen.
-            </p>
-            <a
-              className="text-link"
-              href={electionInfo.sourceUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Wahlseite öffnen
-              <ExternalLink size={16} aria-hidden="true" />
-            </a>
+            <p className="program-kicker">Universität Bremen</p>
+            <h2 id="wahljahr-2026">2026</h2>
           </div>
-        </aside>
-      </div>
+          <p>
+            Wahlzeitraum: {electionInfo.dateRange}. Angezeigt werden die
+            endgültigen, von den zuständigen Wahlleitungen veröffentlichten
+            Ergebnisse.
+          </p>
+        </header>
+
+        <div className="election-highlight-grid" aria-label="RCDS-Ergebnis im Studierendenrat">
+          <div data-reveal><strong>93</strong><span>Stimmen im SR</span></div>
+          <div data-reveal><strong>6,36 %</strong><span>Stimmenanteil</span></div>
+          <div data-reveal><strong>2</strong><span>Sitze im SR</span></div>
+          <div data-reveal><strong>2</strong><span>gewählte Mitglieder</span></div>
+        </div>
+
+        <div className="election-result-list">
+          {electionResults.map((result) => (
+            <article
+              className="election-result-card interactive-card"
+              id={result.id}
+              key={result.id}
+              data-reveal
+            >
+              <header>
+                <div>
+                  <p>{result.detail}</p>
+                  <h3>{result.body}</h3>
+                </div>
+                <span className={`result-seat-badge${result.seats > 0 ? ' result-seat-won' : ''}`}>
+                  {result.seats} {result.seats === 1 ? 'Sitz' : 'Sitze'}
+                </span>
+              </header>
+              <dl className="result-stats">
+                <div><dt>Stimmen</dt><dd>{result.votes}</dd></div>
+                <div><dt>Anteil</dt><dd>{result.voteShare}</dd></div>
+                <div><dt>Wahlbeteiligung</dt><dd>{result.turnout}</dd></div>
+              </dl>
+              {result.note ? <p className="result-note">{result.note}</p> : null}
+              <details className="personal-results">
+                <summary>Personenstimmen anzeigen</summary>
+                <ul>
+                  {result.people.map((person) => (
+                    <li key={person.name}>
+                      <span>
+                        <strong>{person.name}</strong>
+                        <small>{person.outcome}</small>
+                      </span>
+                      <b>{person.votes}</b>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+              <a className="text-link" href={result.sourceUrl} target="_blank" rel="noreferrer">
+                Offizielle Quelle öffnen
+                <ExternalLink size={16} aria-hidden="true" />
+              </a>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <LeadCandidatesBlock currentPage={currentPage} />
     </section>
   )
 }
@@ -638,18 +730,16 @@ function LeadCandidatesBlock({ currentPage }: PageProps) {
       data-reveal
     >
       <header className="lead-candidates-header">
-        <p className="program-kicker">Gremienvertretung</p>
-        <h2 id="gremienvertretung">Unsere Stimmen in AS und SR.</h2>
+        <p className="program-kicker">Gewählt 2026</p>
+        <h2 id="gremienvertretung">Unsere Stimmen im Studierendenrat.</h2>
         <p>
-          Zara und Amira sind die Ansprechpersonen für den
-          Studierendenrat, Mattis für den Akademischen Senat.
+          Zara Sheikhi und Amira Challaoui vertreten den RCDS mit zwei Sitzen
+          im Studierendenrat der Universität Bremen.
         </p>
       </header>
       <div className="lead-candidate-grid">
         {leadCandidates.map((candidate, index) => {
-          const candidateDetails = candidates.find(
-            (item) => item.name === candidate.name,
-          )
+          const candidateDetails = candidatesByName.get(candidate.name)
 
           return (
             <article
@@ -665,11 +755,7 @@ function LeadCandidatesBlock({ currentPage }: PageProps) {
                     loading="eager"
                     style={candidateImageStyle(candidateDetails)}
                   />
-                  {candidateDetails ? (
-                    <span className="lead-candidate-number">
-                      Listenplatz {candidateDetails.listPosition}
-                    </span>
-                  ) : null}
+                  <span className="lead-candidate-number">Gewählt 2026</span>
                 </figure>
               ) : null}
               <div className="lead-candidate-content">
@@ -707,113 +793,181 @@ function CandidatesPage({ currentPage }: PageProps) {
       <div className="section-heading">
         <h1>Ansprechpartner</h1>
         <p>
-          Hier findest du die richtigen Personen für Fragen zum
-          Studierendenrat, zum Akademischen Senat und zu deinem Fachbereich.
+          Die Ansprechpartner sind nach Universität Bremen und Hochschule
+          Bremen getrennt. Das Team der Hochschule Bremen folgt.
         </p>
       </div>
-      <figure className="team-photo" data-reveal>
-        <img
-          src={assetHref(currentPage, campaignImages.candidatesTeam)}
-          alt="Team des RCDS Bremen vor dem Forum am Domshof"
-          loading="lazy"
-        />
-      </figure>
-      <div className="contact-group-grid" aria-label="Ansprechpartner nach Gremium und Fachbereich">
-        {contactGroups.map((group) => (
-          <section
-            className="contact-group-card interactive-card"
-            id={group.id}
-            key={group.id}
-            data-reveal
-          >
-            <span className="contact-group-label">{group.label}</span>
-            <h2>{group.title}</h2>
-            <p>{group.description}</p>
-            <ul>
-              {group.memberNames.map((name) => {
-                const person = candidates.find((candidate) => candidate.name === name)
-
-                return (
-                  <li key={name}>
-                    <strong>{name}</strong>
-                    {person ? <span>{person.studyProgram}</span> : null}
-                  </li>
-                )
-              })}
-            </ul>
-            <a
-              className="text-link text-link-light"
-              href={mailtoWithSubject(`Anfrage zu ${group.label}`)}
-            >
-              Anfrage senden
-              <Mail size={16} aria-hidden="true" />
-            </a>
-          </section>
+      <nav className="institution-nav" aria-label="Hochschulen">
+        {institutionSections.map((institution) => (
+          <a href={`#${institution.id}`} key={institution.id}>
+            {institution.title}
+          </a>
         ))}
-      </div>
-      <div className="section-heading compact-heading people-heading">
-        <h2>Alle Ansprechpartner im Überblick.</h2>
-        <p>
-          Einige Personen decken mehrere Bereiche ab. Die Zuständigkeiten
-          stehen direkt beim jeweiligen Profil.
-        </p>
-      </div>
-      <div className="team-grid">
-        {candidates.map((candidate) => (
-          <article
-            className={`team-card interactive-card${candidate.imagePath ? ' has-photo' : ''}`}
-            key={candidate.listPosition}
+      </nav>
+
+      {institutionSections.map((institution) => {
+        const institutionGroups = contactGroups.filter(
+          (group) => group.institution === institution.id,
+        )
+        const institutionCandidates = candidates.filter(
+          (candidate) => candidate.institution === institution.id,
+        )
+
+        return (
+          <section
+            className="institution-section"
+            id={institution.id}
+            key={institution.id}
             data-reveal
-            style={{ transitionDelay: `${candidate.listPosition * 35}ms` }}
           >
-            {candidate.imagePath ? (
-              <figure className="candidate-photo">
-                <img
-                  src={assetHref(currentPage, candidate.imagePath)}
-                  alt={`Foto von ${candidate.name}`}
-                  loading="eager"
-                  style={candidateImageStyle(candidate)}
-                />
-                <span aria-label={`Listenplatz ${candidate.listPosition}`}>
-                  {candidate.listPosition}
-                </span>
-              </figure>
-            ) : (
-              <div className="avatar" aria-hidden="true">
-                <span>{candidate.listPosition}</span>
+            <header className="institution-header">
+              <span>{institution.label}</span>
+              <div>
+                <h2>{institution.title}</h2>
+                <p>{institution.description}</p>
               </div>
-            )}
-            <div>
-              <h2>{candidate.name}</h2>
-              <div className="responsibility-list">
-                {candidate.responsibilities.map((responsibility) => (
-                  <span className="status-pill" key={responsibility}>
-                    {responsibility}
-                  </span>
+            </header>
+
+            {institution.id === 'universitaet-bremen' ? (
+              <figure className="team-photo" data-reveal>
+                <img
+                  src={assetHref(currentPage, siteImages.candidatesTeam)}
+                  alt="Team des RCDS Bremen vor dem Forum am Domshof"
+                  loading="lazy"
+                />
+              </figure>
+            ) : null}
+
+            {institutionGroups.length > 0 ? (
+              <div
+                className="contact-group-grid"
+                aria-label={`Ansprechpartner ${institution.title}`}
+              >
+                {institutionGroups.map((group) => (
+                  <section
+                    className="contact-group-card interactive-card"
+                    id={group.id}
+                    key={group.id}
+                    data-reveal
+                  >
+                    <span className="contact-group-label">{group.label}</span>
+                    <h3>{group.title}</h3>
+                    <p>{group.description}</p>
+                    <ul>
+                      {group.memberNames.map((name) => {
+                        const person = candidatesByName.get(name)
+
+                        return (
+                          <li key={name}>
+                            <strong>{name}</strong>
+                            {person ? <span>{person.studyProgram}</span> : null}
+                          </li>
+                        )
+                      })}
+                    </ul>
+                    <a
+                      className="text-link text-link-light"
+                      href={mailtoWithSubject(`Anfrage zu ${group.label}`)}
+                    >
+                      Anfrage senden
+                      <Mail size={16} aria-hidden="true" />
+                    </a>
+                  </section>
                 ))}
               </div>
-              <dl className="candidate-meta">
+            ) : (
+              <div className="institution-empty">
+                <Landmark size={34} aria-hidden="true" />
                 <div>
-                  <dt>Studiengang</dt>
-                  <dd>{candidate.studyProgram}</dd>
+                  <h3>Ansprechpartner folgen.</h3>
+                  <p>
+                    Die Personen und Zuständigkeiten der Hochschule Bremen
+                    werden hier ergänzt, sobald sie feststehen.
+                  </p>
                 </div>
-                <div>
-                  <dt>Fachsemester</dt>
-                  <dd>{currentSemester(candidate.semesterSummer2026)}</dd>
+                <a
+                  className="button button-primary"
+                  href={mailtoWithSubject(
+                    'Interesse am RCDS an der Hochschule Bremen',
+                  )}
+                >
+                  <Mail size={20} aria-hidden="true" />
+                  Kontakt aufnehmen
+                </a>
+              </div>
+            )}
+
+            {institutionCandidates.length > 0 ? (
+              <>
+                <div className="section-heading compact-heading people-heading">
+                  <h2>Das Team im Überblick.</h2>
+                  <p>
+                    Einige Personen decken mehrere Bereiche ab. Die
+                    Zuständigkeiten stehen direkt beim jeweiligen Profil.
+                  </p>
                 </div>
-              </dl>
-              {candidate.imagePath ? null : (
-                <span className="status-pill status-pill-muted">Foto folgt</span>
-              )}
-            </div>
-          </article>
-        ))}
-      </div>
+                <div className="team-grid">
+                  {institutionCandidates.map((candidate, index) => (
+                    <article
+                      className={`team-card interactive-card${candidate.imagePath ? ' has-photo' : ''}`}
+                      key={candidate.name}
+                      data-reveal
+                      style={{ transitionDelay: `${index * 35}ms` }}
+                    >
+                      {candidate.imagePath ? (
+                        <figure className="candidate-photo">
+                          <img
+                            src={assetHref(currentPage, candidate.imagePath)}
+                            alt={`Foto von ${candidate.name}`}
+                            loading="lazy"
+                            style={candidateImageStyle(candidate)}
+                          />
+                        </figure>
+                      ) : (
+                        <div className="avatar" aria-hidden="true">
+                          <span>{candidateInitials(candidate.name)}</span>
+                        </div>
+                      )}
+                      <div>
+                        <h3>{candidate.name}</h3>
+                        <div className="responsibility-list">
+                          {candidate.responsibilities.map((responsibility) => (
+                            <span className="status-pill" key={responsibility}>
+                              {responsibility}
+                            </span>
+                          ))}
+                        </div>
+                        <dl className="candidate-meta">
+                          <div>
+                            <dt>Studiengang</dt>
+                            <dd>{candidate.studyProgram}</dd>
+                          </div>
+                          <div>
+                            <dt>Fachsemester</dt>
+                            <dd>
+                              {currentSemester(candidate.semesterSummer2026)}
+                            </dd>
+                          </div>
+                        </dl>
+                        {candidate.imagePath ? null : (
+                          <span className="status-pill status-pill-muted">
+                            Foto folgt
+                          </span>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </>
+            ) : null}
+          </section>
+        )
+      })}
     </section>
   )
 }
 
-function PressPage() {
+function PressPage({ currentPage }: PageProps) {
   return (
     <section className="section section-light page-section">
       <div className="section-kicker">Presse</div>
@@ -834,15 +988,44 @@ function PressPage() {
             <div className="press-release-list">
               {pressReleases.map((release) => (
                 <article className="press-release-card interactive-card" key={`${release.date}-${release.title}`}>
-                  <time dateTime={release.date}>{release.date}</time>
-                  <h3>{release.title}</h3>
-                  <p>{release.summary}</p>
-                  {release.href ? (
-                    <a className="text-link" href={release.href}>
-                      Meldung lesen
-                      <ExternalLink size={16} aria-hidden="true" />
+                  <time dateTime={release.date}>{release.dateLabel}</time>
+                  <h3>
+                    <a
+                      className="press-release-title-link"
+                      href={pageHref(currentPage, release.page)}
+                    >
+                      {release.title}
                     </a>
-                  ) : null}
+                  </h3>
+                  <p>{release.summary}</p>
+                  <div className="press-release-actions">
+                    <a
+                      className="text-link"
+                      href={pageHref(currentPage, release.page)}
+                    >
+                      Pressemitteilung lesen
+                      <FileText size={16} aria-hidden="true" />
+                    </a>
+                    {release.attachments?.length ? (
+                      <div className="press-attachment-list">
+                        <strong>Zugehörige Stellungnahmen</strong>
+                        <ul>
+                          {release.attachments.map((attachment) => (
+                            <li key={attachment.href}>
+                              <a
+                                href={attachment.href}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {attachment.label}
+                                <ExternalLink size={14} aria-hidden="true" />
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </div>
                 </article>
               ))}
             </div>
@@ -875,6 +1058,121 @@ function PressPage() {
   )
 }
 
+function PressReleasePage({ currentPage }: PageProps) {
+  const release = latestPressRelease
+
+  if (!release) {
+    return (
+      <section className="section section-light page-section">
+        <div className="section-heading">
+          <h1>Pressemitteilung nicht gefunden</h1>
+          <a className="text-link" href={pageHref(currentPage, 'presse')}>
+            Zum Pressebereich
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  return (
+    <section className="section section-light page-section press-detail-page">
+      <div className="press-detail-shell">
+        <a
+          className="press-detail-back"
+          href={pageHref(currentPage, 'presse')}
+        >
+          <ArrowLeft size={18} aria-hidden="true" />
+          Alle Pressemeldungen
+        </a>
+
+        <header className="press-detail-header" data-reveal>
+          <div className="press-detail-meta">
+            <span>Pressemitteilung</span>
+            <time dateTime={release.date}>{release.dateLabel}</time>
+          </div>
+          <p className="press-detail-kicker">{release.kicker}</p>
+          <h1>{release.title}</h1>
+          <div className="press-detail-actions">
+            {release.href ? (
+              <a
+                className="button button-primary"
+                href={release.href}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <FileText size={19} aria-hidden="true" />
+                Original-PDF öffnen
+              </a>
+            ) : null}
+            <a
+              className="button button-outline"
+              href={mailtoWithSubject(
+                `Presseanfrage: ${release.title}`,
+              )}
+            >
+              <Mail size={19} aria-hidden="true" />
+              Presseanfrage
+            </a>
+          </div>
+        </header>
+
+        <div className="press-detail-layout">
+          <article className="press-article-body" data-reveal>
+            {release.content.map((block, index) =>
+              block.type === 'quote' ? (
+                <blockquote key={`${block.type}-${index}`}>
+                  <p>„{block.text}“</p>
+                </blockquote>
+              ) : (
+                <p key={`${block.type}-${index}`}>{block.text}</p>
+              ),
+            )}
+          </article>
+
+          <aside className="press-detail-aside" data-reveal>
+            <section className="press-detail-aside-card">
+              <p className="program-kicker">Dokumente</p>
+              <h2>Originale und Stellungnahmen</h2>
+              <ul>
+                {release.href ? (
+                  <li>
+                    <a href={release.href} target="_blank" rel="noreferrer">
+                      Pressemitteilung als PDF
+                      <ExternalLink size={15} aria-hidden="true" />
+                    </a>
+                  </li>
+                ) : null}
+                {release.attachments?.map((attachment) => (
+                  <li key={attachment.href}>
+                    <a
+                      href={attachment.href}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {attachment.label}
+                      <ExternalLink size={15} aria-hidden="true" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="press-detail-aside-card press-detail-contact">
+              <p className="program-kicker">Pressekontakt</p>
+              <h2>Zara Sheikhi</h2>
+              <p>Landesvorsitzender des RCDS Bremen</p>
+              <a href={`mailto:${legalInfo.email}`}>{legalInfo.email}</a>
+              <a href={`tel:${legalInfo.phone.replace(/\s/g, '')}`}>
+                {legalInfo.phone}
+              </a>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function ContactPage({ currentPage }: PageProps) {
   const [emailCopied, setEmailCopied] = useState(false)
   const wishSent =
@@ -902,11 +1200,10 @@ function ContactPage({ currentPage }: PageProps) {
     <section className="section section-contact page-section">
       <div className="contact-copy" data-reveal>
         <div className="section-kicker">Mitmachen</div>
-        <h1>Wahlkampf mitgestalten.</h1>
+        <h1>Hochschulpolitik mitgestalten.</h1>
         <p>
-          Ob Standdienst, Programmarbeit, Social Media oder Gespräch auf dem
-          Campus: Trag dich ein, schreib uns oder komm beim nächsten Treffen
-          dazu.
+          Ob Programmarbeit, Social Media oder Gespräche auf dem Campus: Schreib
+          uns, bring dein Anliegen ein oder komm beim nächsten Treffen dazu.
         </p>
       </div>
       <div className="contact-actions" data-reveal>
@@ -946,7 +1243,7 @@ function ContactPage({ currentPage }: PageProps) {
       >
         <div className="campus-wish-copy">
           <div className="section-kicker">Dein Campus</div>
-          <h2 id="campus-wunsch">Was soll sich an der Uni ändern?</h2>
+          <h2 id="campus-wunsch">Was soll sich an deiner Hochschule ändern?</h2>
           <p>
             Sag uns, was auf dem Campus fehlt, nicht funktioniert oder besser
             werden sollte. Wir sammeln konkrete Anliegen und bringen sie in die
@@ -1078,40 +1375,6 @@ function ContactPage({ currentPage }: PageProps) {
             </li>
           ))}
         </ul>
-      </section>
-      <section className="share-panel" aria-labelledby="teilen" data-reveal>
-        <div className="section-kicker">Teilen</div>
-        <div className="section-heading compact-heading">
-          <h2 id="teilen">Share-Kacheln für Instagram.</h2>
-          <p>
-            Vier quadratische Kampagnenmotive für Story, Feed und Weiterleitung
-            in Chats.
-          </p>
-        </div>
-        <div className="share-grid">
-          {shareAssets.map((asset) => (
-            <article className="share-card interactive-card" key={asset.title}>
-              <img
-                src={assetHref(currentPage, asset.imagePath)}
-                alt={asset.title}
-                loading="lazy"
-              />
-              <div>
-                <h3>{asset.title}</h3>
-                <p>{asset.text}</p>
-                <a
-                  className="text-link"
-                  href={assetHref(currentPage, asset.imagePath)}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Kachel öffnen
-                  <ExternalLink size={16} aria-hidden="true" />
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
       </section>
     </section>
   )
@@ -1310,8 +1573,8 @@ function PrivacyPage({ onOpenCookieSettings }: ShellProps) {
       <div className="section-heading">
         <h1>Datenschutzerklärung</h1>
         <p>
-          Stand: Juni 2026. Diese Hinweise beschreiben die Datenverarbeitung
-          auf dieser Wahlkampf-Website.
+          Stand: August 2026. Diese Hinweise beschreiben die Datenverarbeitung
+          auf dieser Website.
         </p>
       </div>
       <div className="privacy-layout">
@@ -1545,7 +1808,9 @@ function renderPage(
     case 'kandidierende':
       return <CandidatesPage currentPage={currentPage} />
     case 'presse':
-      return <PressPage />
+      return <PressPage currentPage={currentPage} />
+    case 'pressemitteilung-bsu':
+      return <PressReleasePage currentPage={currentPage} />
     case 'mitglied-werden':
       return <MembershipPage />
     case 'kontakt':

@@ -1,13 +1,32 @@
+import pressReleaseBsuUrl from '../../presse/PM/PM_BSU_020826.pdf?url'
+import statementInteriorUrl from '../../presse/PM/S21-338 Stellungnahme INNERES - Bearbeitung Aufenthaltstitel internationale Studierende.pdf?url'
+import statementScienceUrl from '../../presse/PM/S21-338 Stellungnahme UMWELT - Bearbeitung Aufenthaltstitel internationale Studierende.pdf?url'
+
 export type ElectionInfo = {
   title: string
   dateRange: string
-  bodies: string[]
-  votingNote: string
-  electionNote: string
-  pollingPlaces: string[]
   summary: string
+  studentCouncilResultUrl: string
+  committeeResultUrl: string
+}
+
+export type ElectionPersonResult = {
+  name: string
+  votes: number
+  outcome: 'Gewählt' | 'Vertretung'
+}
+
+export type ElectionResult = {
+  id: string
+  body: string
+  detail: string
+  votes: number
+  voteShare: string
+  seats: number
+  turnout: string
+  people: ElectionPersonResult[]
+  note?: string
   sourceUrl: string
-  studentCouncilSourceUrl: string
 }
 
 export type ProgramDemand = {
@@ -26,6 +45,7 @@ export type ProgramSection = {
 export type Candidate = {
   listPosition: number
   name: string
+  institution: InstitutionKey
   studyProgram: string
   semesterSummer2026: number
   responsibilities: string[]
@@ -57,24 +77,14 @@ export type ProgramHighlight = {
   targetId: string
 }
 
-export type ElectionFaq = {
-  question: string
-  answer: string
-}
-
 export type MembershipReason = {
   title: string
   text: string
 }
 
-export type ShareAsset = {
-  title: string
-  text: string
-  imagePath: string
-}
-
 export type ContactGroup = {
   id: string
+  institution: InstitutionKey
   label: string
   title: string
   description: string
@@ -83,10 +93,37 @@ export type ContactGroup = {
 
 export type PressRelease = {
   date: string
+  dateLabel: string
+  page: PageKey
+  kicker: string
   title: string
   summary: string
   href?: string
+  content: Array<{
+    type: 'paragraph' | 'quote'
+    text: string
+  }>
+  attachments?: Array<{
+    label: string
+    href: string
+  }>
 }
+
+export type CurrentProject = {
+  status: string
+  title: string
+  text: string
+  page?: PageKey
+}
+
+export type UpcomingEvent = {
+  date: string
+  title: string
+  details: string
+  href?: string
+}
+
+export type InstitutionKey = 'universitaet-bremen' | 'hochschule-bremen'
 
 export type MembershipStep = {
   title: string
@@ -104,6 +141,7 @@ export type PageKey =
   | 'forderungen'
   | 'kandidierende'
   | 'presse'
+  | 'pressemitteilung-bsu'
   | 'kontakt'
   | 'mitglied-werden'
   | 'impressum'
@@ -111,7 +149,10 @@ export type PageKey =
 
 export type NavigationItem = {
   label: string
-  page: Exclude<PageKey, 'home' | 'impressum' | 'datenschutz'>
+  page: Exclude<
+    PageKey,
+    'home' | 'impressum' | 'datenschutz' | 'pressemitteilung-bsu'
+  >
 }
 
 export type LegalInfo = {
@@ -184,27 +225,82 @@ export const membershipFieldGroups: MembershipFieldGroup[] = [
 ]
 
 export const electionInfo: ElectionInfo = {
-  title: 'Gremienwahlen vom 08. bis 12. Juni 2026',
+  title: 'Wahl',
   dateRange: '08.-12. Juni 2026',
-  bodies: ['Studierendenrat', 'Akademischer Senat', 'Fachbereichsräte 1-12'],
-  votingNote: 'Als Wahlausweis gilt der aktuelle Studierendenausweis.',
-  electionNote:
-    'SR-Wahl und Gremienwahlen finden in derselben Wahlwoche statt, sind aber getrennte Wahlen mit eigenen Wahlordnungen.',
-  pollingPlaces: [
-    'Glashalle',
-    'Grazer Straße 2',
-    'Forum am Domshof',
-    'GW 2',
-    'Mensa',
-    'MZH',
-    'NW 1',
-    'SFG',
-  ],
   summary:
-    'Im Sommersemester 2026 wählt die Universität Bremen die studentischen Vertreterinnen und Vertreter für Studierendenrat, Akademischen Senat und Fachbereichsräte.',
-  sourceUrl: 'https://www.uni-bremen.de/gremienwahlen',
-  studentCouncilSourceUrl: 'https://sr.uni-bremen.de/wiki/Hauptseite',
+    'Im Wahlarchiv dokumentieren wir die offiziellen Ergebnisse der Studierendenrats- und Gremienwahlen an der Universität Bremen.',
+  studentCouncilResultUrl:
+    'https://sr.uni-bremen.de/w/images/e/e3/Endgueltiges_Wahlergebnis_2026.pdf',
+  committeeResultUrl:
+    'https://www.uni-bremen.de/fileadmin/user_upload/sites/gremienwahlen/Gremienwahlen2026_Wahlergebnisse_Committee_Elections2026_Election_Results.pdf',
 }
+
+export const electionResults: ElectionResult[] = [
+  {
+    id: 'studierendenrat',
+    body: 'Studierendenrat',
+    detail: 'Liste 2: RCDS',
+    votes: 93,
+    voteShare: '6,36 %',
+    seats: 2,
+    turnout: '8,40 %',
+    people: [
+      { name: 'Zara Sheikhi', votes: 24, outcome: 'Gewählt' },
+      { name: 'Amira Challaoui', votes: 9, outcome: 'Gewählt' },
+      { name: 'Nils Gutmann', votes: 8, outcome: 'Vertretung' },
+      { name: 'Mattis Wolf', votes: 2, outcome: 'Vertretung' },
+      { name: 'Charlotte Krömker', votes: 2, outcome: 'Vertretung' },
+      { name: 'Lili Bürgerhoff', votes: 1, outcome: 'Vertretung' },
+      { name: 'Lukas Aygün', votes: 1, outcome: 'Vertretung' },
+      { name: 'Jakob Hornhues', votes: 0, outcome: 'Vertretung' },
+      { name: 'Toni Foitl', votes: 0, outcome: 'Vertretung' },
+    ],
+    note: 'Zara Sheikhi erhielt mit 24 persönlichen Stimmen die meisten Stimmen auf der RCDS-Liste. Er und Amira Challaoui sind für die Amtszeit 2026/27 in den Studierendenrat gewählt.',
+    sourceUrl:
+      'https://sr.uni-bremen.de/w/images/e/e3/Endgueltiges_Wahlergebnis_2026.pdf',
+  },
+  {
+    id: 'akademischer-senat',
+    body: 'Akademischer Senat',
+    detail: 'Liste 1: RCDS',
+    votes: 142,
+    voteShare: '10,43 %',
+    seats: 0,
+    turnout: '8,60 %',
+    people: [
+      { name: 'Zara Sheikhi', votes: 73, outcome: 'Vertretung' },
+      { name: 'Mattis Wolf', votes: 41, outcome: 'Vertretung' },
+      { name: 'Amira Challaoui', votes: 28, outcome: 'Vertretung' },
+    ],
+    sourceUrl:
+      'https://www.uni-bremen.de/fileadmin/user_upload/sites/gremienwahlen/Gremienwahlen2026_Wahlergebnisse_Committee_Elections2026_Election_Results.pdf',
+  },
+  {
+    id: 'fachbereich-3',
+    body: 'Fachbereichsrat 3',
+    detail: 'Einzelbewerbung RCDS',
+    votes: 41,
+    voteShare: '25,00 %',
+    seats: 0,
+    turnout: '7,20 %',
+    people: [{ name: 'Zara Sheikhi', votes: 41, outcome: 'Vertretung' }],
+    note: 'Der zweite Sitz wurde bei gleicher Höchstzahl durch Los an die Liste der Stugen des FB 3 vergeben.',
+    sourceUrl:
+      'https://www.uni-bremen.de/fileadmin/user_upload/sites/gremienwahlen/Gremienwahlen2026_Wahlergebnisse_Committee_Elections2026_Election_Results.pdf',
+  },
+  {
+    id: 'fachbereich-8',
+    body: 'Fachbereichsrat 8',
+    detail: 'Einzelbewerbung Amira Challaoui',
+    votes: 21,
+    voteShare: '6,73 %',
+    seats: 0,
+    turnout: '15,40 %',
+    people: [{ name: 'Amira Challaoui', votes: 21, outcome: 'Vertretung' }],
+    sourceUrl:
+      'https://www.uni-bremen.de/fileadmin/user_upload/sites/gremienwahlen/Gremienwahlen2026_Wahlergebnisse_Committee_Elections2026_Election_Results.pdf',
+  },
+]
 
 export const programSections: ProgramSection[] = [
   {
@@ -348,29 +444,6 @@ export const programHighlights: ProgramHighlight[] = [
   },
 ]
 
-export const electionFaqs: ElectionFaq[] = [
-  {
-    question: 'Wann wird gewählt?',
-    answer:
-      'Die Gremienwahl an der Universität Bremen läuft vom 08. bis 12. Juni 2026.',
-  },
-  {
-    question: 'Was wird gewählt?',
-    answer:
-      'Gewählt werden die studentischen Vertreterinnen und Vertreter im Akademischen Senat sowie in den Fachbereichsräten 1 bis 12.',
-  },
-  {
-    question: 'Was brauche ich zur Wahl?',
-    answer:
-      'Studierende wählen mit dem Studierendenausweis. Weitere organisatorische Hinweise veröffentlicht die Universität auf ihrer offiziellen Wahlseite.',
-  },
-  {
-    question: 'Warum ist die Wahl wichtig?',
-    answer:
-      'Die gewählten Vertreterinnen und Vertreter sprechen in zentralen Hochschulgremien mit, wenn es um Studienbedingungen, Organisation und Prioritäten der Universität geht.',
-  },
-]
-
 export const membershipReasons: MembershipReason[] = [
   {
     title: 'Studentische Interessen vertreten',
@@ -394,33 +467,11 @@ export const membershipReasons: MembershipReason[] = [
   },
 ]
 
-export const shareAssets: ShareAsset[] = [
-  {
-    title: 'Uni Bremen kann mehr',
-    text: 'Hot-Take-Kachel für Programm und Lernbedingungen.',
-    imagePath: 'assets/share-uni-kann-mehr.png',
-  },
-  {
-    title: 'Campus Bremen lebt',
-    text: 'Share-Kachel für Events, Mensa, Trinkwasser und Sicherheit.',
-    imagePath: 'assets/share-campus-lebt.png',
-  },
-  {
-    title: 'Verwaltung ist kein Escape Room',
-    text: 'Share-Kachel für App, digitale Wahl und AStA-Reform.',
-    imagePath: 'assets/share-verwaltung.png',
-  },
-  {
-    title: 'Mitglied des RCDS werden',
-    text: 'Share-Kachel mit fünf Gründen für eine Mitgliedschaft.',
-    imagePath: 'assets/share-mitglied-werden.png',
-  },
-]
-
 export const candidates: Candidate[] = [
   {
     listPosition: 1,
     name: 'Zara Sheikhi',
+    institution: 'universitaet-bremen',
     studyProgram: 'Informatik',
     semesterSummer2026: 4,
     responsibilities: ['Studierendenrat (SR)', 'Fachbereich 3'],
@@ -433,6 +484,7 @@ export const candidates: Candidate[] = [
   {
     listPosition: 2,
     name: 'Mattis Wolf',
+    institution: 'universitaet-bremen',
     studyProgram: 'Jura',
     semesterSummer2026: 4,
     responsibilities: ['Akademischer Senat (AS)', 'Fachbereich 6'],
@@ -443,6 +495,7 @@ export const candidates: Candidate[] = [
   {
     listPosition: 3,
     name: 'Amira Challaoui',
+    institution: 'universitaet-bremen',
     studyProgram: 'Politikwissenschaft',
     semesterSummer2026: 2,
     responsibilities: ['Studierendenrat (SR)', 'Fachbereich 8'],
@@ -453,6 +506,7 @@ export const candidates: Candidate[] = [
   {
     listPosition: 4,
     name: 'Nils Gutmann',
+    institution: 'universitaet-bremen',
     studyProgram: 'Jura',
     semesterSummer2026: 2,
     responsibilities: ['Fachbereich 6'],
@@ -463,6 +517,7 @@ export const candidates: Candidate[] = [
   {
     listPosition: 5,
     name: 'Charlotte Krömker',
+    institution: 'universitaet-bremen',
     studyProgram:
       'Kommunikations- und Medienwissenschaften, Politikwissenschaften',
     semesterSummer2026: 6,
@@ -474,6 +529,7 @@ export const candidates: Candidate[] = [
   {
     listPosition: 6,
     name: 'Lili Bürgerhoff',
+    institution: 'universitaet-bremen',
     studyProgram: 'Politikwissenschaften, Soziologie',
     semesterSummer2026: 3,
     responsibilities: ['Fachbereich 8'],
@@ -484,6 +540,7 @@ export const candidates: Candidate[] = [
   {
     listPosition: 7,
     name: 'Jakob Hornhues',
+    institution: 'universitaet-bremen',
     studyProgram: 'Politikwissenschaft',
     semesterSummer2026: 2,
     responsibilities: ['Fachbereich 8'],
@@ -494,6 +551,7 @@ export const candidates: Candidate[] = [
   {
     listPosition: 8,
     name: 'Toni Foitl',
+    institution: 'universitaet-bremen',
     studyProgram: 'Jura',
     semesterSummer2026: 2,
     responsibilities: ['Fachbereich 6'],
@@ -502,6 +560,7 @@ export const candidates: Candidate[] = [
   {
     listPosition: 9,
     name: 'Lukas Aygün',
+    institution: 'universitaet-bremen',
     studyProgram: 'Jura',
     semesterSummer2026: 10,
     responsibilities: ['Fachbereich 6'],
@@ -512,6 +571,7 @@ export const candidates: Candidate[] = [
 export const contactGroups: ContactGroup[] = [
   {
     id: 'studierendenrat',
+    institution: 'universitaet-bremen',
     label: 'SR',
     title: 'Studierendenrat',
     description:
@@ -520,6 +580,7 @@ export const contactGroups: ContactGroup[] = [
   },
   {
     id: 'akademischer-senat',
+    institution: 'universitaet-bremen',
     label: 'AS',
     title: 'Akademischer Senat',
     description:
@@ -528,6 +589,7 @@ export const contactGroups: ContactGroup[] = [
   },
   {
     id: 'fachbereich-3',
+    institution: 'universitaet-bremen',
     label: 'FB 3',
     title: 'Mathematik und Informatik',
     description: 'Ansprechpartner für Themen aus dem Fachbereich 3.',
@@ -535,6 +597,7 @@ export const contactGroups: ContactGroup[] = [
   },
   {
     id: 'fachbereich-6',
+    institution: 'universitaet-bremen',
     label: 'FB 6',
     title: 'Rechtswissenschaft',
     description: 'Ansprechpartner für Themen aus dem Fachbereich 6.',
@@ -542,6 +605,7 @@ export const contactGroups: ContactGroup[] = [
   },
   {
     id: 'fachbereich-8',
+    institution: 'universitaet-bremen',
     label: 'FB 8',
     title: 'Sozialwissenschaften',
     description: 'Ansprechpartner für Themen aus dem Fachbereich 8.',
@@ -554,6 +618,7 @@ export const contactGroups: ContactGroup[] = [
   },
   {
     id: 'fachbereich-9',
+    institution: 'universitaet-bremen',
     label: 'FB 9',
     title: 'Kulturwissenschaften',
     description: 'Ansprechpartnerin für Themen aus dem Fachbereich 9.',
@@ -561,26 +626,113 @@ export const contactGroups: ContactGroup[] = [
   },
 ]
 
-export const pressReleases: PressRelease[] = []
+export const pressReleases: PressRelease[] = [
+  {
+    date: '2026-08-02',
+    dateLabel: '02.08.2026',
+    page: 'pressemitteilung-bsu',
+    kicker: 'Stellungnahmen zur Petition machen Ausmaß der Probleme deutlich',
+    title:
+      'Internationale Studierende dürfen nicht länger im Stich gelassen werden',
+    summary:
+      'Die Stellungnahmen zur RCDS-Petition zeigen die strukturelle Überlastung des Bremen Service Universität. Der RCDS Bremen fordert schnellere Verfahren, ausreichend Personal, zügige Fiktionsbescheinigungen und eine transparente Kommunikation mit den Betroffenen.',
+    href: pressReleaseBsuUrl,
+    content: [
+      {
+        type: 'paragraph',
+        text: 'Die Stellungnahme des Innenresorts zur vom RCDS bei der Bremischen Bürgerschaft eingereichten Petition „S21-338—Bearbeitung Aufenthaltstitel Internationale Studierende“ wirft die Frage auf, welche Prioritäten der Senat gesetzt hat. Innerhalb von nur zwei Semestern ist der Semesterbeitrag um mehr als 100 Euro gestiegen. Studierende sollen diese zusätzlichen Belastungen tragen und sich ihren Lebensunterhalt zunehmend selbst finanzieren. Doch ausgerechnet diejenigen, die bereit sind zu arbeiten, werden durch monatelange Wartezeiten bei Aufenthaltstiteln und Fiktionsbescheinigungen daran gehindert. Wer Studierenden höhere finanzielle Belastungen zumutet, muss auch sicherstellen, dass sie überhaupt die Möglichkeit haben, legal zu arbeiten und ihren Lebensunterhalt zu sichern.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Bremen wirbt international um Studierende und zukünftige Fachkräfte. Wer diesen Anspruch ernst nimmt, muss auch dafür sorgen, dass Menschen nicht monatelang auf aufenthaltsrechtlich notwendige Dokumente warten oder ihren Arbeitsplatz verlieren, weil die Verwaltung überlastet ist.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Zara Sheikhi, Landesvorsitzender des RCDS Bremen, zeigt sich besorgt.',
+      },
+      {
+        type: 'quote',
+        text: 'Der Senat gefährdet die Attraktivität des Wissenschafts- und Wirtschaftsstandorts Bremen.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Besonders enttäuschend ist auch das Schweigen des AStA. Als Interessenvertretung aller Studierenden müsste er sich gerade bei einem Problem, das so viele internationale Studierende in ihrer Existenz betrifft, deutlich positionieren. Statt politischen Druck in der Politik für eine Entlastung des Bremen Service Universität aufzubauen oder das Thema öffentlich sichtbar zu machen, hört man aus der AStA Etage nichts. Internationale Studierende dürfen nicht erst dann Thema sein, wenn über Diversität gesprochen wird. Sie brauchen auch Unterstützung, wenn ihre Existenz durch Verwaltungsversagen gefährdet wird.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Mit den vorliegenden Stellungnahmen der Senatorin für Inneres und Sport liegt erstmals eine offizielle Einschätzung der Situation internationaler Studierender in Bremen vor. Das Ressort betont ausdrücklich die große Bedeutung internationaler Studierender für den Wissenschafts- und Wirtschaftsstandort Bremen sowie für die Fachkräftesicherung. Gleichzeitig räumt es ein, dass das Migrationsamt und der Bremen Service Universität (BSU) seit Jahren unter struktureller Überlastung leiden. Als Ursachen werden steigende Fallzahlen, eine wachsende Zahl an Anträgen und E-Mails sowie fehlende personelle Kapazitäten genannt. Organisatorische Verbesserungen und die Digitalisierung hätten zwar einzelne Abläufe erleichtert, könnten die grundlegenden Probleme allerdings nicht lösen.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Besonders alarmierend ist, dass das Innenressort selbst von lediglich drei Mitarbeitenden spricht, die beim Bremen Service Universität für die aufenthaltsrechtlichen Angelegenheiten von mehr als 5.500 internationalen Studierenden und Forschenden zuständig sind. Gleichzeitig werden Terminwartezeiten von rund 13 Wochen genannt. Aus Gesprächen mit Betroffenen ist dem RCDS Bremen bekannt, dass die Realität häufig noch deutlich drastischer aussieht. Bearbeitungszeiten von sechs Monaten oder länger sind längst keine Seltenheit. Hinzu kommen erhebliche Verzögerungen bei der Ausstellung von Fiktionsbescheinigungen, obwohl gerade diese verhindern sollen, dass Studierende aufgrund behördlicher Bearbeitungszeiten Nachteile erleiden. Die verzögerte Ausstellung setzt die Studierenden erheblich unter Druck. Für viele steht die Wohnung oder der Nebenjob, der häufig die finanzielle Grundlage für das Studium bildet, auf dem Spiel.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Wenn wegen ausstehender Dokumente der Arbeitsplatz verloren geht, geraten Studium, Wohnung und Lebensunterhalt gleichzeitig in Gefahr. Betroffene Studenten beschreiben die Situation dem RCDS gegenüber wie folgt:',
+      },
+      {
+        type: 'quote',
+        text: 'Dann ist das wirklich stressig, mit so vielen Sachen gleichzeitig umzugehen.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Es geht um Menschen, die über Monate in Unsicherheit leben, weil sie trotz rechtzeitig gestellter Anträge nicht wissen, ob sie weiter arbeiten, ihr Praktikum antreten oder ihren Lebensunterhalt sichern können.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Die Petition hat diese Missstände sichtbar gemacht. Jetzt müssen den Erkenntnissen konkrete Maßnahmen folgen: schnellere Verfahren, ausreichend Personal, eine zügige Ausstellung von Fiktionsbescheinigungen und eine transparente Kommunikation mit den Betroffenen.',
+      },
+    ],
+    attachments: [
+      {
+        label: 'Stellungnahme der Senatorin für Inneres und Sport',
+        href: statementInteriorUrl,
+      },
+      {
+        label:
+          'Stellungnahme der Senatorin für Umwelt, Klima und Wissenschaft',
+        href: statementScienceUrl,
+      },
+    ],
+  },
+]
+
+export const currentProjects: CurrentProject[] = [
+  {
+    status: 'Laufend',
+    title: 'Campus-Anliegen aufnehmen',
+    text: 'Wir sammeln konkrete Probleme und Ideen aus dem Hochschulalltag und bringen sie in die zuständigen Gremien ein.',
+    page: 'kontakt',
+  },
+  {
+    status: 'Amtszeit 2026/27',
+    title: 'Arbeit im Studierendenrat',
+    text: 'Mit zwei Sitzen vertreten Zara Sheikhi und Amira Challaoui den RCDS im Studierendenrat der Universität Bremen.',
+    page: 'kandidierende',
+  },
+  {
+    status: 'Nächster Schritt',
+    title: 'Wahlprogramm weiterverfolgen',
+    text: 'Die Forderungen aus der Wahl werden priorisiert und Schritt für Schritt in die politische Arbeit übersetzt.',
+    page: 'forderungen',
+  },
+]
+
+// Neue Termine können hier ergänzt werden und erscheinen automatisch auf der Startseite.
+export const upcomingEvents: UpcomingEvent[] = []
 
 export const leadCandidates: LeadCandidate[] = [
   {
-    role: 'SR',
+    role: 'Gewählt 2026',
     body: 'Studierendenrat',
     name: 'Zara Sheikhi',
     text: 'Zara vertritt den RCDS im Studierendenrat. Er ist Ansprechpartner für die Arbeit der studentischen Selbstverwaltung, die Kontrolle des AStA und den verantwortungsvollen Umgang mit studentischen Beiträgen.',
   },
   {
-    role: 'SR',
+    role: 'Gewählt 2026',
     body: 'Studierendenrat',
     name: 'Amira Challaoui',
     text: 'Amira vertritt den RCDS im Studierendenrat. Sie ist Ansprechpartnerin für die Arbeit der studentischen Selbstverwaltung, die Kontrolle des AStA und den verantwortungsvollen Umgang mit studentischen Beiträgen.',
-  },
-  {
-    role: 'AS',
-    body: 'Akademischer Senat',
-    name: 'Mattis Wolf',
-    text: 'Mattis ist Ansprechpartner für den Akademischen Senat und für universitätsweite Entscheidungen zu Studium, Lehre, Prüfungsordnungen und zentralen Einrichtungen.',
   },
 ]
 
@@ -596,8 +748,8 @@ export const contactLinks: ContactLink[] = [
     icon: 'instagram',
   },
   {
-    label: 'SR-Wahlseite öffnen',
-    href: electionInfo.studentCouncilSourceUrl,
+    label: 'Wahlergebnis 2026 öffnen',
+    href: electionInfo.studentCouncilResultUrl,
     icon: 'source',
   },
 ]
@@ -620,8 +772,12 @@ export const legalInfo: LegalInfo = {
 
 export const campaignSources = [
   {
-    label: 'Uni Bremen Gremienwahlen',
-    href: 'https://www.uni-bremen.de/gremienwahlen',
+    label: 'SR-Wahlergebnis 2026',
+    href: electionInfo.studentCouncilResultUrl,
+  },
+  {
+    label: 'Gremienwahlergebnis 2026',
+    href: electionInfo.committeeResultUrl,
   },
   {
     label: 'RCDS Aufnahmeantrag',
