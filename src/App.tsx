@@ -1386,13 +1386,65 @@ function MembershipPage() {
       <div className="section-heading">
         <h1>Mach beim RCDS Bremen mit.</h1>
         <p>
-          Die Mitgliedschaft läuft über den offiziellen Aufnahmeantrag des
-          RCDS. Dort werden deine Angaben sicher erfasst, verifiziert und an den
-          zuständigen Verband vor Ort weitergeleitet.
+          Bring deine Ideen für den Campus ein, lerne andere Engagierte kennen
+          und gestalte Hochschulpolitik mit uns. Ob Programmarbeit, Social Media
+          oder Gespräche auf dem Campus: Hier findest du einen Einstieg.
         </p>
       </div>
 
-      <div className="membership-hero-panel" data-reveal>
+      <section className="membership-welcome" aria-labelledby="gemeinsam-mitmachen">
+        <h2 id="gemeinsam-mitmachen">Das kannst du bei uns mitgestalten.</h2>
+        <div className="membership-step-grid">
+          <article className="membership-step">
+            <h3>Ideen für deinen Campus</h3>
+            <p>Probleme aus dem Studienalltag sammeln, Lösungen diskutieren und an unseren Positionen mitarbeiten.</p>
+          </article>
+          <article className="membership-step">
+            <h3>Aktionen und Kommunikation</h3>
+            <p>Beiträge für Social Media gestalten, Campus-Gespräche führen und bei der Organisation von Veranstaltungen mitwirken.</p>
+          </article>
+          <article className="membership-step">
+            <h3>Austausch und neue Kontakte</h3>
+            <p>Mit anderen Studierenden ins Gespräch kommen und unterschiedliche Perspektiven auf Hochschulpolitik kennenlernen.</p>
+          </article>
+        </div>
+        <div className="membership-actions">
+          <a className="button button-primary" href={mailtoWithSubject('RCDS Bremen unverbindlich kennenlernen')}>
+            <MessageCircle size={20} aria-hidden="true" />
+            Erst einmal kennenlernen
+          </a>
+          <a className="button button-outline" href="#aufnahmeantrag">
+            Ich möchte Mitglied werden
+          </a>
+        </div>
+      </section>
+
+      <section className="membership-questions" aria-labelledby="vor-dem-beitritt">
+        <div className="section-kicker">Gut zu wissen</div>
+        <h2 id="vor-dem-beitritt">Deine Fragen vor dem Beitritt.</h2>
+        <div className="membership-question-grid">
+          <article>
+            <h3>Kann ich euch erst kennenlernen?</h3>
+            <p>Frag uns unverbindlich nach einer Gelegenheit zum Kennenlernen oder dem nächsten Treffen. Über den Button oben schreibst du uns eine E-Mail; einen Mitgliedsantrag stellst du damit noch nicht.</p>
+          </article>
+          <article>
+            <h3>Wie viel Zeit brauche ich?</h3>
+            <p>Programmarbeit, einzelne Aktionen und Gremienarbeit bringen unterschiedliche Aufgaben mit sich. Schreib uns, wofür du dich interessierst und wie viel Zeit du neben dem Studium mitbringen möchtest.</p>
+          </article>
+          <article>
+            <h3>Was kostet die Mitgliedschaft?</h3>
+            <p>Den aktuell geltenden Mitgliedsbeitrag für Bremen erfährst du direkt bei uns, bevor du deinen Antrag stellst.</p>
+            <a href={mailtoWithSubject('Mitgliedsbeitrag beim RCDS Bremen')}>Mitgliedsbeitrag erfragen</a>
+          </article>
+          <article>
+            <h3>Welche Voraussetzungen gelten?</h3>
+            <p>Du möchtest wissen, ob du Mitglied werden kannst? Schreib uns, an welcher Hochschule du studierst oder in welcher Studienphase du bist. Wir klären mit dir die geltenden Aufnahmevoraussetzungen.</p>
+            <a href={mailtoWithSubject('Aufnahmevoraussetzungen beim RCDS Bremen')}>Voraussetzungen klären</a>
+          </article>
+        </div>
+      </section>
+
+      <div id="aufnahmeantrag" className="membership-hero-panel" data-reveal>
         <div>
           <p className="program-kicker">Offizieller Antrag</p>
           <h2>Online aufnehmen lassen, Bremen als Gruppe angeben.</h2>

@@ -3756,3 +3756,61 @@ body.reveal-ready [data-reveal].is-visible {
     transform: none;
   }
 }
+
+/* Membership: practical entry points before the application process. */
+.membership-welcome,
+.membership-questions {
+  margin-top: 42px;
+  color: var(--rcds-ink);
+}
+
+.membership-welcome h2,
+.membership-questions h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.membership-welcome .membership-step h3 {
+  margin-top: 0;
+}
+
+.membership-question-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 32px;
+  margin-top: 24px;
+}
+
+.membership-question-grid article {
+  border-top: 2px solid var(--rcds-border);
+  padding-top: 18px;
+}
+
+.membership-question-grid h3 {
+  font-size: 1.15rem;
+  margin: 0 0 10px;
+}
+
+.membership-question-grid p {
+  color: var(--rcds-muted);
+  line-height: 1.65;
+  margin: 0 0 12px;
+}
+
+.membership-question-grid a {
+  color: var(--rcds-blue);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+#aufnahmeantrag {
+  scroll-margin-top: 130px;
+}
+
+@media (max-width: 700px) {
+  .membership-question-grid {
+    grid-template-columns: 1fr;
+  }
+}
