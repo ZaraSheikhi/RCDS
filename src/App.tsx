@@ -12,6 +12,7 @@ import {
   ListChecks,
   Mail,
   Menu,
+  MapPin,
   MessageCircle,
   Newspaper,
   Send,
@@ -31,6 +32,7 @@ import {
   currentProjects,
   electionInfo,
   electionResults,
+  featuredEvent,
   leadCandidates,
   legalInfo,
   membershipFieldGroups,
@@ -88,6 +90,7 @@ const siteImages = {
   brandLogo: 'assets/rcds-bremen-logo-white.png',
   heroTeam: 'assets/rcds-team-campus.webp',
   candidatesTeam: 'assets/rcds-team-domshof.webp',
+  eventEnemy: 'assets/event-schildkroete.webp',
 }
 
 const heroProgramPoints = [
@@ -347,6 +350,144 @@ function Header({ currentPage }: PageProps) {
   )
 }
 
+// Original-Pixelfigur für den Event-Banner: 12 x 14 Raster, zwei Laufphasen.
+const spritePalette: Record<string, string> = {
+  N: '#1d4265',
+  H: '#4a2a14',
+  S: '#f2c19b',
+  K: '#111111',
+  O: '#ffa600',
+  B: '#2d3c4b',
+  W: '#ffffff',
+  D: '#5b3417',
+}
+
+const spriteTop = [
+  '...NNNNN....',
+  '..NNNWNNNNN.',
+  '..HHSSSKS...',
+  '.HSSSSSSSS..',
+  '.HHSSSSSS...',
+  '...SSSSS....',
+  '..OOOBOO....',
+  '.OOOOBOOOO..',
+  'SOOOOOOOOOS.',
+  'S.OOOOOOO.S.',
+  '...BBBBB....',
+]
+
+const spriteLegs = [
+  ['..BBB.BBB...', '.BB.....BB..', 'DDD.....DDD.'],
+  ['...BBBBB....', '....BBB.....', '...DDDDD....'],
+]
+
+function PixelSprite({ rows }: { rows: string[] }) {
+  return (
+    <>
+      {rows.flatMap((row, y) =>
+        [...row].map((cell, x) =>
+          cell === '.' ? null : (
+            <rect
+              key={`${x}-${y}`}
+              x={x}
+              y={y}
+              width={1.02}
+              height={1.02}
+              fill={spritePalette[cell]}
+            />
+          ),
+        ),
+      )}
+    </>
+  )
+}
+
+function PixelRunner() {
+  return (
+    <svg
+      className="pixel-runner"
+      viewBox="0 0 12 14"
+      shapeRendering="crispEdges"
+      aria-hidden="true"
+    >
+      <PixelSprite rows={spriteTop} />
+      {spriteLegs.map((legs, frame) => (
+        <g key={frame} className={`pixel-runner-legs frame-${frame}`}>
+          <PixelSprite rows={['', '', '', '', '', '', '', '', '', '', '', ...legs]} />
+        </g>
+      ))}
+    </svg>
+  )
+}
+
+const featuredEventActive =
+  Date.now() < new Date(featuredEvent.endsAt).getTime()
+
+function EventTeaser({ currentPage }: PageProps) {
+  if (!featuredEventActive) return null
+
+  return (
+    <section className="event-teaser" aria-labelledby="event-teaser-title">
+      <div className="event-scene" aria-hidden="true">
+        <div className="event-clouds">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="event-hills">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="event-stage">
+          <div className="event-block">?</div>
+          <div className="event-coin" />
+          <div className="event-enemy">
+            <img src={assetHref(currentPage, siteImages.eventEnemy)} alt="" />
+          </div>
+          <div className="event-stomp">
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className="event-runner">
+            <PixelRunner />
+          </div>
+        </div>
+        <div className="event-ground" />
+      </div>
+
+      <div className="event-teaser-content">
+        <p className="event-teaser-kicker">{featuredEvent.kicker}</p>
+        <h2 id="event-teaser-title">{featuredEvent.title}</h2>
+        <p className="event-teaser-time">{featuredEvent.time}</p>
+        <ul className="event-teaser-games" aria-label="Was euch erwartet">
+          {featuredEvent.games.map((game) => (
+            <li key={game}>{game}</li>
+          ))}
+        </ul>
+        <p className="event-teaser-place">
+          <MapPin size={18} aria-hidden="true" />
+          <span>
+            {featuredEvent.place}, {featuredEvent.address}
+          </span>
+        </p>
+        <p className="event-teaser-text">{featuredEvent.text}</p>
+        <a
+          className="button event-teaser-button"
+          href={featuredEvent.href}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Infos auf Instagram
+          <ExternalLink size={18} aria-hidden="true" />
+        </a>
+      </div>
+    </section>
+  )
+}
+
 function HomePage({ currentPage }: PageProps) {
   return (
     <>
@@ -404,6 +545,8 @@ function HomePage({ currentPage }: PageProps) {
         </div>
       </section>
 
+      <EventTeaser currentPage={currentPage} />
+
       <section className="section section-work" id="projekte" data-reveal>
         <div className="work-column">
           <div className="section-kicker">Aktuelle Projekte</div>
@@ -436,12 +579,17 @@ function HomePage({ currentPage }: PageProps) {
             <div className="event-list">
               {upcomingEvents.map((event) => (
                 <article key={`${event.date}-${event.title}`}>
-                  <time dateTime={event.date}>{event.date}</time>
+                  <time dateTime={event.dateTime ?? event.date}>{event.date}</time>
                   <h3>{event.title}</h3>
                   <p>{event.details}</p>
                   {event.href ? (
-                    <a className="text-link" href={event.href}>
-                      Termin öffnen
+                    <a
+                      className="text-link"
+                      href={event.href}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Infos auf Instagram
                       <ExternalLink size={16} aria-hidden="true" />
                     </a>
                   ) : null}

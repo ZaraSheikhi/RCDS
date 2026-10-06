@@ -118,6 +118,7 @@ export type CurrentProject = {
 
 export type UpcomingEvent = {
   date: string
+  dateTime?: string
   title: string
   details: string
   href?: string
@@ -719,7 +720,38 @@ export const currentProjects: CurrentProject[] = [
 ]
 
 // Neue Termine können hier ergänzt werden und erscheinen automatisch auf der Startseite.
-export const upcomingEvents: UpcomingEvent[] = []
+export const upcomingEvents: UpcomingEvent[] = [
+  {
+    date: 'Fr., 9. Oktober · ab 18:30 Uhr',
+    dateTime: '2026-10-09T18:30',
+    title: 'LAN-Party mit der Jungen Union',
+    details:
+      'Nintendo, PS5 und Brettspiele im Jörg-Kastendiek-Haus, Am Wall 135. Gemeinsam mit der Jungen Union Bremen zocken wir den Abend an. Kommt vorbei und lernt den RCDS ganz entspannt kennen.',
+    href: 'https://www.instagram.com/rcds.bremen/',
+  },
+  {
+    date: 'Fr., 9. Oktober · im Anschluss',
+    dateTime: '2026-10-09',
+    title: 'Bartour durch Bremen',
+    details:
+      'Nach der LAN-Party ziehen wir gemeinsam weiter durch die Bremer Bars. Kommt einfach dazu, auch wenn ihr vorher nicht beim Zocken dabei wart.',
+    href: 'https://www.instagram.com/rcds.bremen/',
+  },
+]
+
+// Hervorgehobener Termin als animierter Banner auf der Startseite.
+// Verschwindet automatisch nach `endsAt`.
+export const featuredEvent = {
+  endsAt: '2026-10-10T06:00',
+  kicker: 'Freitag · 09.10.',
+  title: 'LAN-Party & Bartour',
+  time: 'Ab 18:30 Uhr',
+  games: ['Nintendo', 'PS5', 'Brettspiele'],
+  place: 'Jörg-Kastendiek-Haus',
+  address: 'Am Wall 135',
+  text: 'Gemeinsam mit der Jungen Union Bremen zocken wir den Abend an. Danach geht es zusammen auf Bartour durch Bremen. Alle Studierenden sind willkommen.',
+  href: 'https://www.instagram.com/rcds.bremen/',
+}
 
 export const leadCandidates: LeadCandidate[] = [
   {
